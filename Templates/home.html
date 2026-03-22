@@ -1,0 +1,21 @@
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Sklep</title>
+</head>
+<body>
+
+<h1>Mini Sklep</h1>
+
+<h2>Produkty:</h2>
+
+{% for product in products %}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <b>{{ product.price }} zł</b>
+    </div>
+{% endfor %}
+
+</body>
+</html>
