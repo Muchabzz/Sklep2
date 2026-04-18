@@ -19,6 +19,15 @@ def add_to_cart(request, product_id):
     request.session['cart'] = cart
     return redirect('cart')
 
+def remove_from_cart(request, product_id):
+    cart = request.session.get('cart', [])
+
+    if product_id in cart:
+        cart.remove(product_id)
+
+    request.session['cart'] = cart
+    return redirect('cart')
+
 def cart(request):
     cart_ids = request.session.get('cart', [])
     products = Product.objects.filter(id__in=cart_ids)
