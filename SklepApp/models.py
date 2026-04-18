@@ -7,4 +7,4 @@ class Product(models.Model):
     availability = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.nazwa
+        return self.name
