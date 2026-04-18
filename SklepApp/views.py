@@ -67,3 +67,6 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
+
+def kontakt_view(request):
+    return render(request, 'kontakt.html')
