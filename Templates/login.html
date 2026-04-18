@@ -10,7 +10,8 @@
     <header class="header">
         <div class="logo">
             {% load static %}
-            <img src="{% static 'logo.png' %}" alt="logo">
+            <a href="{% url 'home' %}"><img src="{% static 'logo.png' %}" alt="logo"></a>
+
         </div>
        <nav class="menu">
         <a href="{% url 'home' %}">Strona główna</a>
@@ -19,8 +20,8 @@
         </nav>
         <div class="koszyk">
             {% load static %}
-            <img src="{% static 'cart.png' %}" alt="koszyk">
-            <a href="{% url 'cart' %}">koszyk</a>
+           <a href="{% url 'cart' %}"><img src="{% static 'cart.png' %}" alt="koszyk"></a>
+
         </div>
     </header>
 
