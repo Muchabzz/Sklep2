@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <title>YuluKids</title>
-    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
     <header class="header">
@@ -17,7 +17,9 @@
         <a href="{% url 'login' %}">Zaloguj się</a>
         </nav>
         <div class="koszyk">
-            
+               {% load static %}
+            <img src="{% static 'cart.png' %}" alt="koszyk">
+            <a href="{% url 'cart' %}">koszyk</a>
         </div>
     </header>
 
