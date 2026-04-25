@@ -19,8 +19,32 @@
             <a href="{% url 'cart' %}"><img src="{% static 'grafika/cart.png' %}" alt="koszyk"></a>
         </div>
     </header>
+    <section class="kontakt">
+        <img src="{% static 'grafika/kontakt.png' %}" alt="onas" class="kontakt-img">
+    </section>
 
-    <footer>
-    </footer>
+<footer class="footer">
+  <div class="footer-container">
+
+    <!-- LEWA -->
+    <div class="footer-left">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'grafika/logo.png' %}" alt="Little Rose Boutique">
+      </a>
+      <p>Sukienki dla małych księżniczek<br>na każdą wyjątkową chwilę.</p>
+      
+    </div>
+
+    <!-- PRAWA -->
+    <div class="footer-right">
+      <h4>Kontakt</h4>
+      <p>ul. Kwiatowa 12<br>00-123 Warszawa</p>
+      <p><i class="fas fa-phone"></i> +48 123 456 789</p>
+      <p><i class="fas fa-envelope"></i> kontakt@littlerose.pl</p>
+      <p><i class="fas fa-clock"></i> Pon. - Pt.: 9:00 - 17:00</p>
+    </div>
+
+  </div>
+</footer>
 </body>
 </html>
