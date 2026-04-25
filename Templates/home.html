@@ -1,50 +1,45 @@
 {% load static %}
 <html lang="pl">
 <head>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
     <meta charset="UTF-8">
     <title>YuluKids</title>
-    
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <a href="{% url 'home' %}"><img src="{% static 'logo.png' %}" alt="logo"></a>
-
+            <a href="{% url 'home' %}"><img src="{% static 'grafika/logo.png' %}" alt="logo"></a>
         </div>
-       <nav class="menu">
-        <a href="{% url 'home' %}">Strona główna</a>
-        <a href="{% url 'kontakt' %}">Kontakt</a>
-        <a href="{% url 'login' %}">Zaloguj się</a>
+        <nav class="menu">
+            <a href="{% url 'home' %}">Strona główna</a>
+            <a href="{% url 'kontakt' %}">Kontakt</a>
+            <a href="{% url 'login' %}">Zaloguj się</a>
         </nav>
         <div class="koszyk">
-               {% load static %}
-            <a href="{% url 'cart' %}"><img src="{% static 'cart.png' %}" alt="koszyk"></a>
-
+            <a href="{% url 'cart' %}"><img src="{% static 'grafika/cart.png' %}" alt="koszyk"></a>
         </div>
     </header>
+
     <section class="banner">
-        <img src="grafika/baner.png" alt="Baner" class="banner-img">
+        <img src="{% static 'grafika/baner.png' %}" alt="Baner" class="banner-img">
     </section>
 
-<h1>YuluKids</h1>
-<a src="baner"
+    <h1>YuluKids</h1>
+    <h2>Produkty:</h2>
 
-<h2> Produkty:</h2>
-
-{% for product in products %}
-    <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-        {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" 
-                 style="width:200px; height:200px; object-fit:cover;">
-        {% else %}
-            <img src="/static/grafika/produkt1.png" alt="brak zdjęcia"
-                 style="width:200px; height:200px; object-fit:cover;">
-        {% endif %}
-        <h3>{{ product.name }}</h3>
-        <b>{{ product.price }} zł</b>
-    </div>
-{% endfor %}
+    {% for product in products %}
+        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                     style="width:200px; height:200px; object-fit:cover;">
+            {% else %}
+                <img src="{% static 'grafika/produkt1.png' %}" alt="brak zdjęcia"
+                     style="width:200px; height:200px; object-fit:cover;">
+            {% endif %}
+            <h3>{{ product.name }}</h3>
+            <b>{{ product.price }} zł</b>
+        </div>
+    {% endfor %}
 
 </body>
 </html>
