@@ -3,6 +3,10 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
 }
 
 .logo {
@@ -16,11 +20,29 @@
     height: auto;
 }
 
+
 .menu {
     flex: 1;
     display: flex;
     justify-content: center;
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 6px 16px;
     gap: 20px;
+    transition: transform 0.2s ease;
+}
+
+.menu a {
+    text-decoration: none;
+    color: black;
+}
+.menu:hover {
+    background-color: black;
+    transform: scale(1.05);
+}
+
+.menu:hover a {
+    color: white;
 }
 
 .koszyk {
