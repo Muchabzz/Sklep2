@@ -1,5 +1,6 @@
 h1 {
   font-family: 'Brush Script MT', cursive;
+  align-items: center;
 }
 
 .header {
@@ -88,25 +89,28 @@ body {
 
 .footer-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   max-width: 1200px;
   margin: 0 auto;
+  gap: 350px;
 }
 
 /* LEWA */
 .footer-left img {
   width: 130px;
   margin-bottom: 12px;
+  display: block;
 }
 
 .footer-left p {
   font-size: 0.9rem;
   color: #555;
-  text-align: center;
+  text-align: left;
   line-height: 1.6;
   margin-bottom: 14px;
 }
+
 
 /* PRAWA */
 .footer-right h4 {
@@ -126,5 +130,3 @@ body {
   color: #e07070;
   margin-right: 6px;
 }
-
-
