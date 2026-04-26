@@ -26,21 +26,29 @@
 
     <h1>YuluKids – małe sukienki, wielkie marzenia</h1>
     <h2>Nasze produkty</h2>
+    {% load static %}
 
+{% load static %}
+
+<div class="products-grid">
     {% for product in products %}
-        <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}"
-                     style="width:200px; height:200px; object-fit:cover;">
-            {% else %}
-                <img src="{% static 'grafika/produkt1.png' %}" alt="brak zdjęcia"
-                     style="width:200px; height:200px; object-fit:cover;">
-            {% endif %}
-            <h3>{{ product.name }}</h3>
-            <b>{{ product.price }} zł</b>
-        </div>
-    {% endfor %}
+    <div class="product-card">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
+        {% else %}
+            <img src="{% static 'grafika/produkt1.png' %}" alt="brak zdjęcia" class="product-img">
+        {% endif %}
+        <h3 class="product-name">{{ product.name }}</h3>
+        <b class="product-price">{{ product.price }} zł</b>
 
+        <form method="POST" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-cart">Dodaj do koszyka</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+   
     <footer class="footer">
   <div class="footer-container">
 
