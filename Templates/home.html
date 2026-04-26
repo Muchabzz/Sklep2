@@ -39,7 +39,7 @@
             <img src="{% static 'grafika/produkt1.png' %}" alt="brak zdjęcia" class="product-img">
         {% endif %}
         <h3 class="product-name">{{ product.name }}</h3>
-        <b class="product-price">{{ product.price }} zł</b>
+        <b class="product-price">{{ product.price }} zł</b> 
 
         <form method="POST" action="{% url 'add_to_cart' product.id %}">
             {% csrf_token %}
