@@ -278,3 +278,86 @@ body {
 .footer{
     margin-top:auto;
 }
+.register-container{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:80px 20px;
+    background:#f8efe9;
+}
+
+.register-box{
+    width:450px;
+    background:#fffaf8;
+    padding:50px 40px;
+    border-radius:30px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    text-align:center;
+}
+
+.register-box h1{
+    font-size:48px;
+    margin-bottom:35px;
+    color:#000;
+    font-family:cursive;
+}
+
+.register-box form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.register-box input{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:15px;
+    background:#f3e4e7;
+    font-size:16px;
+    outline:none;
+    transition:0.3s;
+}
+
+.register-box input:focus{
+    background:#edd6dc;
+}
+
+.register-box button{
+    padding:16px;
+    border:none;
+    border-radius:15px;
+    background:#e8c6cf;
+    color:#000;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.register-box button:hover{
+    background:#ddb1be;
+}
+
+.login-text{
+    margin-top:25px;
+    font-size:15px;
+    color:#555;
+}
+
+.login-text a{
+    color:#c77f95;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.login-text a:hover{
+    text-decoration:underline;
+}
+
+#password-message{
+    font-size:14px;
+    margin-top:-5px;
+    margin-bottom:5px;
+}

@@ -19,6 +19,61 @@
             <a href="{% url 'cart' %}"><img src="{% static 'grafika/cart.png' %}" alt="koszyk"></a>
         </div>
     </header>
+    <section class="register-container">
+
+    <div class="register-box">
+
+        <h1>Zarejestruj się</h1>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input type="text"
+                   name="first_name"
+                   placeholder="Imię"
+                   required>
+
+            <input type="text"
+                   name="last_name"
+                   placeholder="Nazwisko"
+                   required>
+
+            <input type="email"
+                   name="email"
+                   placeholder="Adres e-mail"
+                   required>
+
+            <input type="password"
+                   id="password1"
+                   name="password1"
+                   placeholder="Hasło"
+                   required>
+
+            <input type="password"
+                   id="password2"
+                   name="password2"
+                   placeholder="Powtórz hasło"
+                   required>
+
+            <p id="password-message"></p>
+
+            <button type="submit">
+                Załóż konto
+            </button>
+
+        </form>
+
+        <p class="login-text">
+            Masz już konto?
+            <a href="{% url 'login' %}">
+                Zaloguj się
+            </a>
+        </p>
+
+    </div>
+
+</section>
 
 
     
@@ -45,6 +100,37 @@
 
   </div>
 </footer>
+
+<script>
+
+const password1 = document.getElementById("password1");
+const password2 = document.getElementById("password2");
+const message = document.getElementById("password-message");
+
+function checkPasswords(){
+
+    if(password2.value === ""){
+        message.innerHTML = "";
+        return;
+    }
+
+    if(password1.value === password2.value){
+
+        message.innerHTML = "Hasła są zgodne";
+        message.style.color = "green";
+
+    }else{
+
+        message.innerHTML = "Hasła nie są takie same";
+        message.style.color = "red";
+    }
+}
+
+password1.addEventListener("keyup", checkPasswords);
+password2.addEventListener("keyup", checkPasswords);
+
+</script>
+
 </body>
 </html>
 
