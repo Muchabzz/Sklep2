@@ -25,7 +25,7 @@ import os
 SECRET_KEY = os.environ.get('SECRET_KEY','django-insecure-fh2g7*+r2#ld1t378th)dndtfdr@fgls!2%kimfn$!mhr04(hx')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['sklep2-owtt.onrender.com', 'localhost', '127.0.0.1']
 

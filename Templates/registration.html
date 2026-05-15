@@ -5,7 +5,6 @@
     <title>YuluKids</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-
 <body>
     <header class="header">
         <div class="logo">
@@ -20,24 +19,6 @@
             <a href="{% url 'cart' %}"><img src="{% static 'grafika/cart.png' %}" alt="koszyk"></a>
         </div>
     </header>
-    <section class="login-container">
-    <div class="login-box">
-        <h1>Zaloguj się</h1>
-
-        <form method="POST">
-            {% csrf_token %}
-
-            <input type="text" name="username" placeholder="Nazwa użytkownika" required>
-            <input type="password" id="password" name="password" placeholder="password" required>
-            <button type="submit">Zaloguj się</button>
-        </form>
-
-        <p class="register-text">
-            Nie masz konta?
-            <a href="{% url 'register' %}">Zarejestruj się</a>
-        </p>
-    </div>
-</section>
 
 
     
@@ -64,32 +45,6 @@
 
   </div>
 </footer>
-<script>
-const passwordInput = document.getElementById("password");
-
-passwordInput.addEventListener("input", function () {
-
-    const value = passwordInput.value;
-    const lastChar = value.slice(-1);
-
-    passwordInput.type = "text";
-
-    passwordInput.value =
-        "•".repeat(value.length - 1) + lastChar;
-
-    clearTimeout(passwordInput.timer);
-
-    passwordInput.timer = setTimeout(() => {
-
-        passwordInput.type = "password";
-        passwordInput.value = value;
-
-    }, 150);
-
-});
-</script>
 </body>
 </html>
 
-
-  
