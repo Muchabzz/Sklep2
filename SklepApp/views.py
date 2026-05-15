@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Product
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home_view(request):
@@ -67,6 +67,10 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
+
+@login_required
+def panel_view(request):
+    return render(request, 'panel.html')
 
 def kontakt_view(request):
     return render(request, 'kontakt.html')
