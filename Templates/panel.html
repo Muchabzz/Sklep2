@@ -1,5 +1,49 @@
-<h1>Panel użytkownika</h1>
+{% load static %}
 
-<p>Witaj, {{ user.username }}!</p>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel użytkownika</title>
 
-<a href="{% url 'logout' %}">Wyloguj się</a>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+    <section class="panel-container">
+
+        <div class="panel-box">
+
+            <h1>Panel użytkownika</h1>
+
+            <div class="user-info">
+
+                <div class="info-card">
+                    <h3>Nazwa użytkownika</h3>
+                    <p>{{ user.username }}</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Imię i nazwisko</h3>
+                    <p>{{ user.first_name }} {{ user.last_name }}</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>Email</h3>
+                    <p>{{ user.email }}</p>
+                </div>
+
+            </div>
+
+            <div class="panel-buttons">
+                <a href="{% url 'home' %}" class="panel-btn">Strona główna</a>
+                <a href="{% url 'cart' %}" class="panel-btn">Koszyk</a>
+                <a href="{% url 'logout' %}" class="panel-btn logout-btn">Wyloguj</a>
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>

@@ -36,18 +36,34 @@
 
 <div class="products-grid">
     {% for product in products %}
-    <div class="product-card">
-        {% if product.image %}
-            <img src="{% static 'grafika/' %}{{ product.image }}" alt="{{ product.name }}" class="product-img">
-        {% else %}
-            <img src="{% static 'grafika/produkt1.png' %}" alt="brak zdjęcia" class="product-img">
-        {% endif %}
-        <h3 class="product-name">{{ product.name }}</h3>
-        <b class="product-price">{{ product.price }} zł</b> 
+     <div class="product-card">
 
-        <form method="POST" action="{% url 'add_to_cart' product.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn-cart">Dodaj do koszyka</button>
+            <a href="{% url 'item_details' product.id %}" class="product-link">
+
+                {% if product.image %}
+                    <img src="{% static 'grafika/' %}{{ product.image }}"
+                         alt="{{ product.name }}"
+                         class="product-img">
+                {% else %}
+                    <img src="{% static 'grafika/produkt1.png' %}"
+                         alt="brak zdjęcia"
+                         class="product-img">
+                {% endif %}
+
+                <h3 class="product-name">{{ product.name }}</h3>
+
+                <b class="product-price">
+                    {{ product.price }} zł
+                </b>
+
+            </a>
+
+            <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+
+                <button type="submit" class="btn-cart">
+                    Dodaj do koszyka
+                </button>
         </form>
     </div>
     {% endfor %}
