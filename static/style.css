@@ -769,3 +769,389 @@ body {
 
     font-weight:bold;
 }
+
+.dashboard {
+    display: flex;
+    gap: 35px;
+    max-width: 1450px;
+    margin: 35px auto;
+    padding: 0 30px;
+}
+
+.dashboard-sidebar {
+    width: 260px;
+    min-height: 760px;
+    background: #fff7f7;
+    border-radius: 0 0 28px 28px;
+    padding: 35px 22px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+.side-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    color: #111;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.side-link.active {
+    background: #dc5b66;
+    color: white;
+    font-weight: bold;
+}
+
+.side-link:hover {
+    background: #f5d6dc;
+}
+
+.side-link.logout {
+    margin-top: 60px;
+}
+
+.dashboard-content {
+    flex: 1;
+}
+
+.dashboard-welcome {
+    margin-bottom: 30px;
+}
+
+.dashboard-welcome h1 {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+.dashboard-welcome p {
+    font-size: 18px;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+    margin-bottom: 28px;
+}
+
+.dash-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    gap: 22px;
+    align-items: center;
+    box-shadow: 0 5px 16px rgba(0,0,0,0.08);
+}
+
+.dash-icon {
+    width: 70px;
+    height: 70px;
+    background: #f9dfe3;
+    color: #b8424c;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+.dash-card p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.dash-card h2 {
+    margin: 5px 0;
+    font-size: 34px;
+}
+
+.dash-card a {
+    color: #d84d59;
+    text-decoration: none;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 25px;
+}
+
+.orders-box,
+.profile-box,
+.newsletter-box {
+    background: white;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 5px 16px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-title a {
+    color: #9f232d;
+    text-decoration: none;
+}
+
+.orders-box table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.orders-box th,
+.orders-box td {
+    padding: 16px 12px;
+    border-bottom: 1px solid #efd5da;
+    text-align: left;
+}
+
+.orders-box thead {
+    background: #fff1f2;
+}
+
+.status {
+    padding: 7px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.status.green {
+    background: #dff3df;
+    color: #187a24;
+}
+
+.status.orange {
+    background: #fff0d9;
+    color: #c46b00;
+}
+
+.status.red {
+    background: #fde1e1;
+    color: #a60000;
+}
+
+.profile-box {
+    text-align: center;
+}
+
+.profile-box h2 {
+    text-align: left;
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    background: #f7dadd;
+    color: #8e2e38;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 42px;
+    margin: 20px auto;
+}
+
+.profile-box p {
+    color: #555;
+}
+
+.edit-profile-btn {
+    display: block;
+    margin-top: 25px;
+    background: #f7cbd1;
+    color: #9f232d;
+    padding: 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.newsletter-box {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: linear-gradient(90deg, #fff3f4, #ffe2e7);
+}
+
+.newsletter-box div:nth-child(2) {
+    flex: 1;
+}
+
+.newsletter-box input {
+    width: 250px;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: white;
+    font-size: 16px;
+}
+
+.newsletter-box button {
+    padding: 16px 26px;
+    background: #dc5b66;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.newsletter-box button:hover {
+    background: #b9444d;
+}
+
+.profile-edit-box {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 5px 16px rgba(0,0,0,0.08);
+    max-width: 650px;
+}
+
+.profile-edit-box h1 {
+    font-size: 38px;
+    margin-bottom: 8px;
+}
+
+.profile-edit-box p {
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.profile-form label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.profile-form input {
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: #f3e4e8;
+    font-size: 16px;
+}
+
+.profile-form input:disabled {
+    opacity: 0.7;
+}
+
+.profile-form button {
+    margin-top: 25px;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: #dc5b66;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-form button:hover {
+    background: #b9444d;
+}
+.empty-panel-box {
+    margin-top: 30px;
+    background: #fff3f4;
+    border-radius: 18px;
+    padding: 35px;
+    text-align: center;
+}
+
+.empty-panel-box h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.empty-panel-box a {
+    display: inline-block;
+    margin-top: 20px;
+    background: #dc5b66;
+    color: white;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 14px;
+    font-weight: bold;
+}
+
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 30px;
+}
+
+.payment-card {
+    background: #fff3f4;
+    padding: 25px;
+    border-radius: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.payment-card:hover {
+    background: #f7dfe3;
+}
+
+.settings-list {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.settings-item {
+    background: #fff3f4;
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-item h3 {
+    margin-bottom: 6px;
+}
+
+.settings-item p {
+    margin: 0;
+    color: #555;
+}
+
+.settings-item a,
+.settings-item button {
+    background: #dc5b66;
+    color: white;
+    border: none;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.settings-item.danger {
+    background: #ffe5e5;
+}
+
+.settings-item.danger button {
+    background: #b93636;
+}

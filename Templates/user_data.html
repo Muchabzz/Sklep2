@@ -1,0 +1,71 @@
+{% load static %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dane osobowe</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'grafika/logo.png' %}" alt="logo">
+        </a>
+    </div>
+
+    <nav class="menu">
+        <a href="{% url 'home' %}">Strona główna</a>
+        <a href="{% url 'kontakt' %}">Kontakt</a>
+        <a href="{% url 'panel' %}">{{ user.username }}</a>
+    </nav>
+
+    <div class="koszyk">
+        <a href="{% url 'cart' %}">
+            <img src="{% static 'grafika/cart.png' %}" alt="koszyk">
+            <span id="cart-count">{{ cart_count }}</span>
+        </a>
+    </div>
+</header>
+
+<main class="dashboard">
+
+    <aside class="dashboard-sidebar">
+        <a class="side-link" href="{% url 'panel' %}">🏠 Pulpit</a>
+        <a class="side-link" href="{% url 'user_orders' %}">🛍 Moje zamówienia</a>
+        <a class="side-link" href="{% url 'user_favorites' %}">♡ Ulubione produkty</a>
+        <a class="side-link active" href="{% url 'user_data' %}">👤 Dane osobowe</a>
+        <a class="side-link" href="{% url 'user_addresses' %}">📍 Adresy dostawy</a>
+        <a class="side-link" href="{% url 'user_settings' %}">⚙ Ustawienia konta</a>
+        <a class="side-link logout" href="{% url 'logout' %}">↪ Wyloguj się</a>
+    </aside>
+
+    <section class="dashboard-content">
+        <div class="profile-edit-box">
+            <h1>Dane osobowe</h1>
+            <p>Tutaj możesz zmienić swoje podstawowe dane konta.</p>
+
+            <form method="POST" class="profile-form">
+                {% csrf_token %}
+
+                <label>Imię</label>
+                <input type="text" name="first_name" value="{{ user.first_name }}">
+
+                <label>Nazwisko</label>
+                <input type="text" name="last_name" value="{{ user.last_name }}">
+
+                <label>Email</label>
+                <input type="email" name="email" value="{{ user.email }}">
+
+                <label>Nazwa użytkownika</label>
+                <input type="text" value="{{ user.username }}" disabled>
+
+                <button type="submit">Zapisz zmiany</button>
+            </form>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

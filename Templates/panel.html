@@ -1,49 +1,160 @@
 {% load static %}
-
-<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <title>Panel użytkownika</title>
-
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
 
-    <section class="panel-container">
+<header class="header">
+    <div class="logo">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'grafika/logo.png' %}" alt="logo">
+        </a>
+    </div>
 
-        <div class="panel-box">
+    <nav class="menu">
+        <a href="{% url 'home' %}">Strona główna</a>
+        <a href="{% url 'kontakt' %}">Kontakt</a>
+        <a href="{% url 'panel' %}">{{ user.username }}</a>
+    </nav>
 
-            <h1>Panel użytkownika</h1>
+    <div class="koszyk">
+        <a href="{% url 'cart' %}">
+            <img src="{% static 'grafika/cart.png' %}" alt="koszyk">
+            <span id="cart-count">{{ cart_count }}</span>
+        </a>
+    </div>
+</header>
 
-            <div class="user-info">
+<main class="dashboard">
 
-                <div class="info-card">
-                    <h3>Nazwa użytkownika</h3>
-                    <p>{{ user.username }}</p>
+    <aside class="dashboard-sidebar">
+        <a class="side-link active" href="{% url 'panel' %}">🏠 Pulpit</a>
+        <a class="side-link" href="{% url 'user_orders' %}">🛍 Moje zamówienia</a>
+        <a class="side-link" href="{% url 'user_favorites' %}">♡ Ulubione produkty</a>
+        <a class="side-link" href="{% url 'user_data' %}">👤 Dane osobowe</a>
+        <a class="side-link" href="{% url 'user_addresses' %}">📍 Adresy dostawy</a>
+        <a class="side-link" href="{% url 'user_settings' %}">⚙ Ustawienia konta</a>
+        <a class="side-link logout" href="{% url 'logout' %}">↪ Wyloguj się</a>
+    </aside>
+
+    <section class="dashboard-content">
+
+        <div class="dashboard-welcome">
+            <h1>Witaj, {{ user.username }}! 👋</h1>
+            <p>Cieszymy się, że znowu jesteś z nami.</p>
+        </div>
+
+        <div class="dashboard-cards">
+
+            <div class="dash-card">
+                <div class="dash-icon">🛍</div>
+                <div>
+                    <p>Zamówienia</p>
+                    <h2>0</h2>
+                    <a href="#">Zobacz wszystkie</a>
                 </div>
-
-                <div class="info-card">
-                    <h3>Imię i nazwisko</h3>
-                    <p>{{ user.first_name }} {{ user.last_name }}</p>
-                </div>
-
-                <div class="info-card">
-                    <h3>Email</h3>
-                    <p>{{ user.email }}</p>
-                </div>
-
             </div>
 
-            <div class="panel-buttons">
-                <a href="{% url 'home' %}" class="panel-btn">Strona główna</a>
-                <a href="{% url 'cart' %}" class="panel-btn">Koszyk</a>
-                <a href="{% url 'logout' %}" class="panel-btn logout-btn">Wyloguj</a>
+            <div class="dash-card">
+                <div class="dash-icon">♡</div>
+                <div>
+                    <p>Ulubione</p>
+                    <h2>0</h2>
+                    <a href="#">Zobacz ulubione</a>
+                </div>
+            </div>
+
+            <div class="dash-card">
+                <div class="dash-icon">📍</div>
+                <div>
+                    <p>Adresy</p>
+                    <h2>0</h2>
+                    <a href="#">Zobacz adresy</a>
+                </div>
             </div>
 
         </div>
 
+        <div class="dashboard-grid">
+
+            <section class="orders-box">
+                <div class="section-title">
+                    <h2>Ostatnie zamówienia</h2>
+                    <a href="#">Zobacz wszystkie</a>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Zamówienie</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Kwota</th>
+                            <th>Szczegóły</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>#1234</td>
+                            <td>20.05.2026</td>
+                            <td><span class="status green">Dostarczone</span></td>
+                            <td>120.00 zł</td>
+                            <td>→</td>
+                        </tr>
+
+                        <tr>
+                            <td>#1233</td>
+                            <td>10.05.2026</td>
+                            <td><span class="status orange">W realizacji</span></td>
+                            <td>89.00 zł</td>
+                            <td>→</td>
+                        </tr>
+
+                        <tr>
+                            <td>#1232</td>
+                            <td>02.05.2026</td>
+                            <td><span class="status red">Anulowane</span></td>
+                            <td>60.00 zł</td>
+                            <td>→</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <aside class="profile-box">
+                <h2>Twoje dane</h2>
+
+                <div class="avatar">
+                    {{ user.username|first|upper }}
+                </div>
+
+                <h3>{{ user.username }}</h3>
+                <p>{{ user.email }}</p>
+
+                <a href="#" class="edit-profile-btn">Edytuj dane</a>
+            </aside>
+
+        </div>
+
+        <section class="newsletter-box">
+            <div class="dash-icon">🎁</div>
+
+            <div>
+                <h2>Dołącz do naszego newslettera!</h2>
+                <p>Bądź na bieżąco z nowościami i promocjami.</p>
+            </div>
+
+            <input type="email" placeholder="Twój adres e-mail">
+            <button>Zapisz się</button>
+        </section>
+
     </section>
+
+</main>
 
 </body>
 </html>

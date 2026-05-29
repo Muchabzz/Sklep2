@@ -1,0 +1,72 @@
+{% load static %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Adresy dostawy</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'grafika/logo.png' %}" alt="logo">
+        </a>
+    </div>
+
+    <nav class="menu">
+        <a href="{% url 'home' %}">Strona główna</a>
+        <a href="{% url 'kontakt' %}">Kontakt</a>
+        <a href="{% url 'panel' %}">{{ user.username }}</a>
+    </nav>
+
+    <div class="koszyk">
+        <a href="{% url 'cart' %}">
+            <img src="{% static 'grafika/cart.png' %}" alt="koszyk">
+            <span id="cart-count">{{ cart_count }}</span>
+        </a>
+    </div>
+</header>
+
+<main class="dashboard">
+
+    <aside class="dashboard-sidebar">
+        <a class="side-link" href="{% url 'panel' %}">🏠 Pulpit</a>
+        <a class="side-link" href="{% url 'user_orders' %}">🛍 Moje zamówienia</a>
+        <a class="side-link" href="{% url 'user_favorites' %}">♡ Ulubione produkty</a>
+        <a class="side-link" href="{% url 'user_data' %}">👤 Dane osobowe</a>
+        <a class="side-link active" href="{% url 'user_addresses' %}">📍 Adresy dostawy</a>
+        <a class="side-link" href="{% url 'user_settings' %}">⚙ Ustawienia konta</a>
+        <a class="side-link logout" href="{% url 'logout' %}">↪ Wyloguj się</a>
+    </aside>
+
+    <section class="dashboard-content">
+        <div class="profile-edit-box">
+            <h1>Adresy dostawy</h1>
+            <p>Dodaj adres, który później będzie można wykorzystać przy zamówieniu.</p>
+
+            <form class="profile-form">
+                <label>Imię i nazwisko</label>
+                <input type="text" placeholder="Jan Kowalski">
+
+                <label>Ulica i numer domu</label>
+                <input type="text" placeholder="Kwiatowa 12">
+
+                <label>Kod pocztowy</label>
+                <input type="text" placeholder="00-123">
+
+                <label>Miasto</label>
+                <input type="text" placeholder="Warszawa">
+
+                <label>Numer telefonu</label>
+                <input type="text" placeholder="+48 123 456 789">
+
+                <button type="button">Zapisz adres</button>
+            </form>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>
