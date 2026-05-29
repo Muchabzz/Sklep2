@@ -15,5 +15,11 @@ urlpatterns = [
     path('check-username/', views.check_username, name='check_username'),
     path('increase/<int:product_id>/', views.increase_quantity, name='increase_quantity'),
     path('decrease/<int:product_id>/', views.decrease_quantity, name='decrease_quantity'),
-    path('clear-cart/', views.clear_cart, name='clear_cart'),  
+    path('clear-cart/', views.clear_cart, name='clear_cart'),
+    path('panel/', views.panel_view, name='panel'),
+    path('panel/dane/', views.user_data_view, name='user_data'),
+    path('panel/zamowienia/', views.user_orders_view, name='user_orders'),
+    path('panel/ulubione/', views.user_favorites_view, name='user_favorites'),
+    path('panel/adresy/', views.user_addresses_view, name='user_addresses'),
+    path('panel/ustawienia/', views.user_settings_view, name='user_settings'),
 ]

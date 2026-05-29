@@ -5,6 +5,8 @@ from .models import Product
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 
 # Create your views here.
 def home_view(request):
@@ -161,7 +163,24 @@ def register_view(request):
 
 @login_required
 def panel_view(request):
-    return render(request, 'panel.html')
+    cart = request.session.get('cart', {})
+
+    if isinstance(cart, dict):
+        cart_count = sum(cart.values())
+    else:
+        cart_count = len(cart)
+
+    return render(request, 'panel.html', {
+        'cart_count': cart_count
+    })
+
+def get_cart_count(request):
+    cart = request.session.get('cart', {})
+
+    if isinstance(cart, dict):
+        return sum(cart.values())
+
+    return len(cart)
 
 def kontakt_view(request):
     cart = request.session.get('cart', [])
@@ -178,3 +197,48 @@ def check_username(request):
     return JsonResponse({
         'exists': exists
     })
+
+@login_required
+def user_data_view(request):
+    cart = request.session.get('cart', {})
+    cart_count = sum(cart.values()) if isinstance(cart, dict) else len(cart)
+
+    if request.method == "POST":
+        request.user.first_name = request.POST.get('first_name')
+        request.user.last_name = request.POST.get('last_name')
+        request.user.email = request.POST.get('email')
+        request.user.save()
+
+        return redirect('user_data')
+
+    return render(request, 'user_data.html', {
+        'cart_count': cart_count
+    })
+
+
+@login_required
+def user_orders_view(request):
+    return render(request, 'user_orders.html', {
+        'cart_count': get_cart_count(request)
+    })
+
+
+@login_required
+def user_favorites_view(request):
+    return render(request, 'user_favorites.html', {
+        'cart_count': get_cart_count(request)
+    })
+
+
+@login_required
+def user_addresses_view(request):
+    return render(request, 'user_addresses.html', {
+        'cart_count': get_cart_count(request)
+    })
+
+@login_required
+def user_settings_view(request):
+    return render(request, 'user_settings.html', {
+        'cart_count': get_cart_count(request)
+    })
+   
