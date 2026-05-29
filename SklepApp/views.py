@@ -3,44 +3,128 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Product
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 # Create your views here.
 def home_view(request):
-    products = Product.objects.filter(availability=True)
-    return render(request, 'home.html', {'products': products})
+    products = Product.objects.all()
+    cart = request.session.get('cart', [])
+
+    return render(request, 'home.html', {
+        'products': products,
+        'cart_count': len(cart)
+    })
 
 def item_details(request, product_id):
     product = get_object_or_404(Product, id=product_id, availability=True)
-    return render(request, 'item_details.html', {'product': product})
+
+    cart = request.session.get('cart', [])
+
+    return render(request, 'item_details.html', {
+        'product': product,
+        'cart_count': len(cart)
+    })
 
 def add_to_cart(request, product_id):
-    cart = request.session.get('cart', [])
+    if request.method == "POST":
 
-    if product_id not in cart:
-        cart.append(product_id)
+        cart = request.session.get('cart', {})
 
-    request.session['cart'] = cart
-    return redirect('cart')
+        product_id = str(product_id)
+
+        if product_id in cart:
+            cart[product_id] += 1
+        else:
+            cart[product_id] = 1
+
+        request.session['cart'] = cart
+
+        return JsonResponse({
+            'success': True,
+            'cart_count': sum(cart.values())
+        })
+
+    return redirect('home')
+
+    return redirect('home')
 
 def remove_from_cart(request, product_id):
-    cart = request.session.get('cart', [])
+    cart = request.session.get('cart', {})
+
+    product_id = str(product_id)
 
     if product_id in cart:
-        cart.remove(product_id)
+        del cart[product_id]
 
     request.session['cart'] = cart
+    request.session.modified = True
+
     return redirect('cart')
 
 def cart(request):
-    cart_ids = request.session.get('cart', [])
-    products = Product.objects.filter(id__in=cart_ids)
 
-    total = sum(product.price for product in products)
+    cart_data = request.session.get('cart', {})
+
+    products = []
+
+    total = 0
+
+    for product_id, quantity in cart_data.items():
+
+        product = Product.objects.get(id=product_id)
+
+        subtotal = product.price * quantity
+
+        total += subtotal
+
+        products.append({
+            'product': product,
+            'quantity': quantity,
+            'subtotal': subtotal
+        })
 
     return render(request, 'cart.html', {
         'products': products,
-        'total': total
+        'total': total,
+        'cart_count': sum(cart_data.values())
     })
+
+def increase_quantity(request, product_id):
+
+    cart = request.session.get('cart', {})
+
+    product_id = str(product_id)
+
+    if product_id in cart:
+        cart[product_id] += 1
+
+    request.session['cart'] = cart
+
+    return redirect('cart')
+
+def decrease_quantity(request, product_id):
+
+    cart = request.session.get('cart', {})
+
+    product_id = str(product_id)
+
+    if product_id in cart:
+
+        cart[product_id] -= 1
+
+        if cart[product_id] <= 0:
+            del cart[product_id]
+
+    request.session['cart'] = cart
+
+    return redirect('cart')
+
+def clear_cart(request):
+    request.session['cart'] = {}
+    request.session.modified = True
+
+    return redirect('cart')
 
 def login_view(request):
     if request.method == 'POST':
@@ -80,4 +164,17 @@ def panel_view(request):
     return render(request, 'panel.html')
 
 def kontakt_view(request):
-    return render(request, 'kontakt.html')
+    cart = request.session.get('cart', [])
+
+    return render(request, 'kontakt.html', {
+        'cart_count': len(cart)
+    })
+
+def check_username(request):
+    username = request.GET.get('username', '')
+
+    exists = User.objects.filter(username=username).exists()
+
+    return JsonResponse({
+        'exists': exists
+    })

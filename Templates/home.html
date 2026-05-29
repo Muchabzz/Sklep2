@@ -20,7 +20,10 @@
             {% endif %}
         </nav>
         <div class="koszyk">
-            <a href="{% url 'cart' %}"><img src="{% static 'grafika/cart.png' %}" alt="koszyk"></a>
+            <a href="{% url 'cart' %}">
+                <img src="{% static 'grafika/cart.png' %}" alt="koszyk">
+                <span id="cart-count">{{ cart_count }}</span>
+            </a>
         </div>
     </header>
 
@@ -58,13 +61,10 @@
 
             </a>
 
-            <form method="POST" action="{% url 'add_to_cart' product.id %}">
+            <form method="POST" action="{% url 'add_to_cart' product.id %}" class="add-to-cart-form">
                 {% csrf_token %}
-
-                <button type="submit" class="btn-cart">
-                    Dodaj do koszyka
-                </button>
-        </form>
+                <button type="submit" class="btn-cart">Dodaj do koszyka</button>
+            </form>
     </div>
     {% endfor %}
 </div>
@@ -92,6 +92,47 @@
 
   </div>
 </footer>
+<script>
+const forms = document.querySelectorAll(".add-to-cart-form");
+
+forms.forEach(form => {
+    form.addEventListener("click", function(event) {
+        event.stopPropagation();
+    });
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const url = form.action;
+        const csrfToken = form.querySelector("[name=csrfmiddlewaretoken]").value;
+        const button = form.querySelector("button");
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                button.textContent = "Dodano!";
+
+                const cartCount = document.getElementById("cart-count");
+                if (cartCount) {
+                    cartCount.textContent = data.cart_count;
+                }
+
+                setTimeout(() => {
+                    button.textContent = "Dodaj do koszyka";
+                }, 1500);
+            }
+        });
+    });
+});
+</script>
 </body>
 
 </html>

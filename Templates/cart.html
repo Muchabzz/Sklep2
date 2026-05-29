@@ -13,12 +13,82 @@
         <nav class="menu">
             <a href="{% url 'home' %}">Strona główna</a>
             <a href="{% url 'kontakt' %}">Kontakt</a>
-            <a href="{% url 'login' %}">Zaloguj się</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'panel' %}">{{ user.username }}</a>
+            {% else %}
+                <a href="{% url 'login' %}">Zaloguj się</a>
+            {% endif %}
         </nav>
         <div class="koszyk">
-            <a href="{% url 'cart' %}"><img src="{% static 'grafika/cart.png' %}" alt="koszyk"></a>
+            <a href="{% url 'cart' %}">
+                <img src="{% static 'grafika/cart.png' %}" alt="koszyk">
+                <span id="cart-count">{{ cart_count }}</span>
+            </a>
         </div>
     </header>
+
+    <main class="cart-page">
+    <h1>Twój koszyk</h1>
+
+    {% if products %}
+        <div class="cart-box">
+
+            {% for item in products %}
+    <div class="cart-item">
+
+        <img src="{% static 'grafika/' %}{{ item.product.image }}" alt="{{ item.product.name }}">
+
+        <div class="cart-info">
+            <h3>{{ item.product.name }}</h3>
+            <p>{{ item.product.description|truncatechars:120 }}</p>
+        </div>
+
+        <div class="cart-price">
+            {{ item.product.price }} zł
+        </div>
+
+       <div class="quantity-box">
+          <a href="{% url 'decrease_quantity' item.product.id %}" class="qty-btn">
+            −
+          </a>
+
+          <span class="qty-number">
+            {{ item.quantity }}
+          </span>
+
+          <a href="{% url 'increase_quantity' item.product.id %}" class="qty-btn">
+            +
+          </a>
+      </div>
+
+        <div class="cart-price">
+            {{ item.subtotal }} zł
+        </div>
+    </div>
+{% endfor %}
+
+           <div class="cart-summary">
+              <span>Razem:</span>
+              <strong>{{ total }} zł</strong>
+          </div>
+
+          <div class="cart-buttons">
+              <a href="{% url 'clear_cart' %}" class="clear-cart-btn">
+                🗑 Wyczyść koszyk
+              </a>
+
+              <button class="checkout-btn">
+                Przejdź do zamówienia
+              </button>
+          </div>
+
+    {% else %}
+        <div class="empty-cart">
+            <h2>Koszyk jest pusty</h2>
+            <a href="{% url 'home' %}">Wróć do sklepu</a>
+        </div>
+    {% endif %}
+</main>
 
     <footer class="footer">
   <div class="footer-container">

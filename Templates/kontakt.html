@@ -20,7 +20,10 @@
             {% endif %}
         </nav>
         <div class="koszyk">
-            <a href="{% url 'cart' %}"><img src="{% static 'grafika/cart.png' %}" alt="koszyk"></a>
+            <a href="{% url 'cart' %}">
+                <img src="{% static 'grafika/cart.png' %}" alt="koszyk">
+                <span id="cart-count">{{ cart_count }}</span>
+            </a>
         </div>
     </header>
     <section class="kontakt">

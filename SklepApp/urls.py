@@ -12,4 +12,8 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('kontakt/', views.kontakt_view, name='kontakt'),
     path('panel/', views.panel_view, name='panel'),
+    path('check-username/', views.check_username, name='check_username'),
+    path('increase/<int:product_id>/', views.increase_quantity, name='increase_quantity'),
+    path('decrease/<int:product_id>/', views.decrease_quantity, name='decrease_quantity'),
+    path('clear-cart/', views.clear_cart, name='clear_cart'),  
 ]

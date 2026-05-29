@@ -47,33 +47,48 @@
 
             <input type="text"
                     name="username"
+                    id="username"
                     placeholder="Nazwa użytkownika"
+                    value="{{ form.username.value|default:'' }}"
                     required>
+
+            <div id="usernameInfo" class="password-info"></div>
 
             <input type="text"
                     name="first_name"
                     placeholder="Imię"
+                    value="{{ request.POST.first_name }}"
                     required>
 
             <input type="text"
                     name="last_name"
                     placeholder="Nazwisko"
+                    value="{{ request.POST.last_name }}"
                     required>
 
-            <input type="email"
+            <input type="email" 
                     name="email"
-                    placeholder="Adres e-mail"
+                    placeholder="Email"
+                    value="{{ request.POST.email }}"
                     required>
 
             <input type="password"
                     name="password1"
+                    id="password1"
                     placeholder="Hasło"
                     required>
 
-            <input type="password"
-                    name="password2"
-                    placeholder="Powtórz hasło"
-                    required>
+            <div id="passwordInfo" class="password-info">
+                Hasło musi mieć minimum 8 znaków.
+            </div>
+
+<input type="password"
+       name="password2"
+       id="password2"
+       placeholder="Powtórz hasło"
+       required>
+
+<div id="passwordMatch" class="password-info"></div>
 
 
             <button type="submit">
@@ -120,33 +135,59 @@
 </footer>
 
 <script>
-
 const password1 = document.getElementById("password1");
 const password2 = document.getElementById("password2");
-const message = document.getElementById("password-message");
+const passwordInfo = document.getElementById("passwordInfo");
+const passwordMatch = document.getElementById("passwordMatch");
+const username = document.getElementById("username");
+const usernameInfo = document.getElementById("usernameInfo");
 
-function checkPasswords(){
+password1.addEventListener("input", function () {
+    const value = password1.value;
 
-    if(password2.value === ""){
-        message.innerHTML = "";
+    if (value.length < 8) {
+        passwordInfo.textContent = "Hasło jest za krótkie. Minimum 8 znaków.";
+        passwordInfo.style.color = "red";
+    } else if (!/[0-9]/.test(value)) {
+        passwordInfo.textContent = "Dodaj przynajmniej jedną cyfrę.";
+        passwordInfo.style.color = "orange";
+    } else {
+        passwordInfo.textContent = "Hasło wygląda dobrze.";
+        passwordInfo.style.color = "green";
+    }
+});
+
+password2.addEventListener("input", function () {
+    if (password2.value !== password1.value) {
+        passwordMatch.textContent = "Hasła nie są takie same.";
+        passwordMatch.style.color = "red";
+    } else {
+        passwordMatch.textContent = "Hasła są takie same.";
+        passwordMatch.style.color = "green";
+    }
+});
+
+username.addEventListener("input", function () {
+    const value = username.value;
+
+    if (value.length < 3) {
+        usernameInfo.textContent = "Nazwa użytkownika jest za krótka.";
+        usernameInfo.style.color = "red";
         return;
     }
 
-    if(password1.value === password2.value){
-
-        message.innerHTML = "Hasła są zgodne";
-        message.style.color = "green";
-
-    }else{
-
-        message.innerHTML = "Hasła nie są takie same";
-        message.style.color = "red";
-    }
-}
-
-password1.addEventListener("keyup", checkPasswords);
-password2.addEventListener("keyup", checkPasswords);
-
+    fetch(`/check-username/?username=${value}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                usernameInfo.textContent = "Ta nazwa użytkownika jest już zajęta.";
+                usernameInfo.style.color = "red";
+            } else {
+                usernameInfo.textContent = "Ta nazwa użytkownika jest dostępna.";
+                usernameInfo.style.color = "green";
+            }
+        });
+});
 </script>
 
 </body>
