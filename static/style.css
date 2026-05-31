@@ -1156,3 +1156,252 @@ body {
     background: #b93636;
 }
 
+.error-box{
+    background:#ffdede;
+    color:#c62828;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:600;
+}
+
+.success-box{
+    background:#dff5df;
+    color:#1d7a1d;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:20px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.auth-page {
+    min-height: 100vh;
+    background: #fff7f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-box {
+    width: 520px;
+    background: #fffafa;
+    border-radius: 32px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.auth-logo img {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.auth-box h1 {
+    font-size: 52px;
+    margin-bottom: 20px;
+}
+
+.auth-box p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.auth-box input {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    background: #f3e4e8;
+    font-size: 18px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.auth-box button,
+.auth-button-link {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    background: #d85b63;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.auth-box button:hover,
+.auth-button-link:hover {
+    background: #b9444d;
+}
+
+.auth-link {
+    display: inline-block;
+    margin-top: 22px;
+    color: #9f232d;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+.reset-page {
+    min-height: 100vh;
+    background: #fff7f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset-box {
+    width: 520px;
+    background: #fffafa;
+    border-radius: 30px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.reset-logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
+
+.reset-box h1 {
+    font-size: 52px;
+    margin-bottom: 20px;
+}
+
+.reset-box p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.reset-box input {
+    width: 100%;
+    height: 58px;
+    padding: 16px 18px;
+    border: none;
+    border-radius: 18px;
+    background: #f3e4e8;
+    font-size: 18px;
+    box-sizing: border-box;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.reset-box button {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    background: #d85b63;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.reset-link {
+    display: inline-block;
+    margin-top: 22px;
+    color: #9f232d;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.password-live-info {
+    font-size: 14px;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+.reset-box label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 8px;
+    margin-top: 12px;
+}
+
+
+
+body.reset-page {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #fff7f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body.reset-page .reset-box {
+    width: 520px;
+    background: #fffafa;
+    border-radius: 30px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+body.reset-page .reset-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 25px;
+}
+
+body.reset-page .reset-box input {
+    width: 100%;
+    height: 58px;
+    padding: 16px 18px;
+    border: 2px solid transparent;
+    border-radius: 18px;
+    background: #f3e4e8;
+    font-size: 18px;
+    box-sizing: border-box;
+    display: block;
+    margin-bottom: 12px;
+    outline: none;
+}
+
+body.reset-page .reset-box input:focus {
+    border-color: #c0444e;
+}
+
+body.reset-page .reset-box label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 8px;
+    margin-top: 12px;
+}
+
+body.reset-page .reset-box button,
+body.reset-page .reset-button {
+    width: 100%;
+    padding: 18px;
+    border: none;
+    border-radius: 18px;
+    background: #c0444e;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    box-sizing: border-box;
+}
+
+.password-live-info {
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}

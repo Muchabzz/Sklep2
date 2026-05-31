@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import Product
+from .models import Product, Order, OrderItem, Address
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.contrib import messages
 
 # Create your views here.
 def home_view(request):
@@ -130,14 +131,31 @@ def clear_cart(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
             login(request, user)
             return redirect('home')
-    else:
-        form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
+
+        if not User.objects.filter(username=username).exists():
+            messages.error(
+                request,
+                "Nie istnieje użytkownik o takiej nazwie."
+            )
+        else:
+            messages.error(
+                request,
+                "Błędne hasło."
+            )
+
+    return render(request, 'login.html')
 
 def logout_view(request):
     logout(request)
@@ -146,6 +164,12 @@ def logout_view(request):
 def register_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
+        email = request.POST.get('email')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Konto z takim adresem e-mail już istnieje.")
+            return render(request, 'register.html', {'form': form})
+        
         if form.is_valid():
             user = form.save()
             user.first_name = request.POST['first_name']
@@ -163,15 +187,20 @@ def register_view(request):
 
 @login_required
 def panel_view(request):
-    cart = request.session.get('cart', {})
+    cart_count = get_cart_count(request)
 
-    if isinstance(cart, dict):
-        cart_count = sum(cart.values())
-    else:
-        cart_count = len(cart)
+    orders = Order.objects.filter(
+        user=request.user
+    ).order_by("-created_at")[:3]
+
+    orders_count = Order.objects.filter(
+        user=request.user
+    ).count()
 
     return render(request, 'panel.html', {
-        'cart_count': cart_count
+        'cart_count': cart_count,
+        'orders': orders,
+        'orders_count': orders_count
     })
 
 def get_cart_count(request):
@@ -218,10 +247,12 @@ def user_data_view(request):
 
 @login_required
 def user_orders_view(request):
+    orders = Order.objects.filter(user=request.user).order_by("-created_at")
+
     return render(request, 'user_orders.html', {
+        'orders': orders,
         'cart_count': get_cart_count(request)
     })
-
 
 @login_required
 def user_favorites_view(request):
@@ -242,3 +273,88 @@ def user_settings_view(request):
         'cart_count': get_cart_count(request)
     })
    
+def forgot_password_view(request):
+
+    if request.method == "POST":
+
+        messages.success(
+            request,
+            "Jeżeli konto istnieje, wysłaliśmy instrukcję resetu hasła."
+        )
+
+    return render(request, 'forgot_password.html')
+
+@login_required
+def checkout_view(request):
+    cart = request.session.get('cart', {})
+
+    if not cart:
+        return redirect('cart')
+
+    address = Address.objects.filter(user=request.user).first()
+
+    if request.method == "POST":
+        full_name = request.POST.get("full_name")
+        phone = request.POST.get("phone")
+        street = request.POST.get("street")
+        postal_code = request.POST.get("postal_code")
+        city = request.POST.get("city")
+
+        total = 0
+        order_items = []
+
+        for product_id, quantity in cart.items():
+            product = Product.objects.get(id=product_id)
+            subtotal = product.price * quantity
+            total += subtotal
+
+            order_items.append({
+                "product": product,
+                "quantity": quantity,
+                "price": product.price
+            })
+
+        order = Order.objects.create(
+            user=request.user,
+            total=total,
+            full_name=full_name,
+            phone=phone,
+            street=street,
+            postal_code=postal_code,
+            city=city
+        )
+
+        for item in order_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item["product"],
+                quantity=item["quantity"],
+                price=item["price"]
+            )
+
+        request.session["cart"] = {}
+        request.session.modified = True
+
+        return redirect("order_success", order_id=order.id)
+
+    return render(request, "checkout.html", {
+        "address": address
+    })
+
+
+@login_required
+def order_success_view(request, order_id):
+    order = Order.objects.get(id=order_id, user=request.user)
+
+    return render(request, 'order_success.html', {
+        'order': order
+    })
+
+@login_required
+def order_detail_view(request, order_id):
+    order = Order.objects.get(id=order_id, user=request.user)
+
+    return render(request, 'order_detail.html', {
+        'order': order,
+        'cart_count': get_cart_count(request)
+    })

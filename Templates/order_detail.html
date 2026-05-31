@@ -1,0 +1,70 @@
+{% load static %}
+
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Szczegóły zamówienia</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'grafika/logo.png' %}" alt="logo">
+        </a>
+    </div>
+
+    <nav class="menu">
+        <a href="{% url 'home' %}">Strona główna</a>
+        <a href="{% url 'kontakt' %}">Kontakt</a>
+        <a href="{% url 'panel' %}">{{ user.username }}</a>
+    </nav>
+
+    <div class="koszyk">
+        <a href="{% url 'cart' %}">
+            <img src="{% static 'grafika/cart.png' %}" alt="koszyk">
+            <span id="cart-count">{{ cart_count }}</span>
+        </a>
+    </div>
+</header>
+
+<main class="dashboard">
+    <section class="dashboard-content">
+
+        <div class="profile-edit-box">
+            <h1>Zamówienie #{{ order.id }}</h1>
+
+            <p><strong>Data:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+            <p><strong>Kwota:</strong> {{ order.total }} zł</p>
+
+            <h2>Dane dostawy</h2>
+            <p>{{ order.full_name }}</p>
+            <p>{{ order.phone }}</p>
+            <p>{{ order.street }}</p>
+            <p>{{ order.postal_code }} {{ order.city }}</p>
+
+            <h2>Produkty</h2>
+
+            {% for item in order.items.all %}
+                <div class="cart-item">
+                    <div class="cart-info">
+                        <h3>{{ item.product.name }}</h3>
+                        <p>Ilość: {{ item.quantity }}</p>
+                        <p>Cena: {{ item.price }} zł</p>
+                        <p>Razem: {{ item.subtotal }} zł</p>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <a href="{% url 'user_orders' %}" class="reset-button">
+                Wróć do zamówień
+            </a>
+        </div>
+
+    </section>
+</main>
+
+</body>
+</html>

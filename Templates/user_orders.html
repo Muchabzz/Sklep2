@@ -42,15 +42,49 @@
 
     <section class="dashboard-content">
         <div class="profile-edit-box">
-            <h1>Moje zamówienia</h1>
-            <p>Tutaj będzie historia zamówień użytkownika.</p>
+    <h1>Moje zamówienia</h1>
+    <p>Tutaj znajdziesz historię swoich zamówień.</p>
 
-            <div class="empty-panel-box">
-                <h2>Brak zamówień</h2>
-                <p>Nie masz jeszcze żadnych zamówień.</p>
-                <a href="{% url 'home' %}">Przejdź do sklepu</a>
-            </div>
+    {% if orders %}
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Zamówienie</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Kwota</th>
+                    <th>Szczegóły</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                        <td>
+                            <span class="status orange">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td>{{ order.total }} zł</td>
+                        <td>
+                            <a href="{% url 'order_detail' order.id %}" class="order-arrow">
+                                →
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="empty-panel-box">
+            <h2>Brak zamówień</h2>
+            <p>Nie masz jeszcze żadnych zamówień.</p>
+            <a href="{% url 'home' %}">Przejdź do sklepu</a>
         </div>
+    {% endif %}
+</div>
     </section>
 
 </main>

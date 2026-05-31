@@ -53,7 +53,7 @@
                 <div class="dash-icon">🛍</div>
                 <div>
                     <p>Zamówienia</p>
-                    <h2>0</h2>
+                        <h2>{{ orders_count }}</h2>
                     <a href="#">Zobacz wszystkie</a>
                 </div>
             </div>
@@ -83,7 +83,7 @@
             <section class="orders-box">
                 <div class="section-title">
                     <h2>Ostatnie zamówienia</h2>
-                    <a href="#">Zobacz wszystkie</a>
+                    <a href="{% url 'user_orders' %}">Zobacz wszystkie</a>
                 </div>
 
                 <table>
@@ -98,29 +98,21 @@
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>#1234</td>
-                            <td>20.05.2026</td>
-                            <td><span class="status green">Dostarczone</span></td>
-                            <td>120.00 zł</td>
-                            <td>→</td>
-                        </tr>
-
-                        <tr>
-                            <td>#1233</td>
-                            <td>10.05.2026</td>
-                            <td><span class="status orange">W realizacji</span></td>
-                            <td>89.00 zł</td>
-                            <td>→</td>
-                        </tr>
-
-                        <tr>
-                            <td>#1232</td>
-                            <td>02.05.2026</td>
-                            <td><span class="status red">Anulowane</span></td>
-                            <td>60.00 zł</td>
-                            <td>→</td>
-                        </tr>
+                        {% for order in orders %}
+                            <tr>
+                                <td>#{{ order.id }}</td>
+                                <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                                <td><span class="status orange">{{ order.status }}</span></td>
+                                <td>{{ order.total }} zł</td>
+                                <td>
+                                    <a href="{% url 'order_detail' order.id %}">→</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">Nie masz jeszcze żadnych zamówień.</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </section>

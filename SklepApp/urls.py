@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home_view, name='home'),
@@ -19,7 +20,14 @@ urlpatterns = [
     path('panel/', views.panel_view, name='panel'),
     path('panel/dane/', views.user_data_view, name='user_data'),
     path('panel/zamowienia/', views.user_orders_view, name='user_orders'),
+    path('panel/zamowienia/<int:order_id>/', views.order_detail_view, name='order_detail'),
     path('panel/ulubione/', views.user_favorites_view, name='user_favorites'),
     path('panel/adresy/', views.user_addresses_view, name='user_addresses'),
     path('panel/ustawienia/', views.user_settings_view, name='user_settings'),
+    path('reset-hasla/',auth_views.PasswordResetView.as_view(template_name='password_reset.html',email_template_name='password_reset_email.html',success_url='/reset-hasla/wyslano/'),name='password_reset'),
+    path('reset-hasla/wyslano/',auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),name='password_reset_done'),
+    path('reset-hasla/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html',success_url='/reset-hasla/gotowe/'),name='password_reset_confirm'),
+    path('reset-hasla/gotowe/',auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),name='password_reset_complete'),
+    path('checkout/', views.checkout_view, name='checkout'),
+    path('zamowienie/<int:order_id>/gotowe/', views.order_success_view, name='order_success'),
 ]

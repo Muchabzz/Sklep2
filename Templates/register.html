@@ -25,6 +25,14 @@
 
         <h1>Zarejestruj się</h1>
 
+        {% if messages %}
+            <div class="error-box">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <form method="POST">
 
             {% csrf_token %}

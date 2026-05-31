@@ -73,13 +73,13 @@
           </div>
 
           <div class="cart-buttons">
-              <a href="{% url 'clear_cart' %}" class="clear-cart-btn">
-                🗑 Wyczyść koszyk
-              </a>
+                <a href="{% url 'clear_cart' %}" class="clear-cart-btn">
+                    🗑 Wyczyść koszyk
+                </a>
 
-              <button class="checkout-btn">
-                Przejdź do zamówienia
-              </button>
+                <a href="{% url 'checkout' %}" class="checkout-btn">
+                    Przejdź do zamówienia
+                </a>
           </div>
 
     {% else %}

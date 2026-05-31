@@ -24,12 +24,24 @@
     <div class="login-box">
         <h1>Zaloguj się</h1>
 
+        {% if messages %}
+            <div class="error-box">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <form method="POST">
             {% csrf_token %}
 
             <input type="text" name="username" placeholder="Nazwa użytkownika" required>
-            <input type="password" id="password" name="password" placeholder="Hasło" required>
+            <input type="password" name="password" placeholder="Hasło">
             <button type="submit">Zaloguj się</button>
+
+            <a href="{% url 'password_reset' %}">
+                Nie pamiętam hasła
+            </a>
         </form>
 
         <p class="register-text">

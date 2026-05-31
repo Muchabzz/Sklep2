@@ -1,0 +1,30 @@
+{% load static %}
+
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zamówienie złożone</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body class="reset-page">
+
+<div class="reset-box">
+    <a href="{% url 'home' %}">
+        <img src="{% static 'grafika/logo.png' %}" class="reset-logo" alt="logo">
+    </a>
+
+    <h1>Dziękujemy!</h1>
+
+    <p>Twoje zamówienie zostało złożone.</p>
+
+    <p><strong>Numer zamówienia:</strong> #{{ order.id }}</p>
+    <p><strong>Kwota:</strong> {{ order.total }} zł</p>
+    <p><strong>Status:</strong> {{ order.status }}</p>
+
+    <a href="{% url 'panel' %}" class="reset-button">
+        Przejdź do panelu
+    </a>
+</div>
+
+</body>
+</html>
