@@ -33,7 +33,6 @@
     <aside class="dashboard-sidebar">
         <a class="side-link" href="{% url 'panel' %}">🏠 Pulpit</a>
         <a class="side-link" href="{% url 'user_orders' %}">🛍 Moje zamówienia</a>
-        <a class="side-link" href="{% url 'user_favorites' %}">♡ Ulubione produkty</a>
         <a class="side-link" href="{% url 'user_data' %}">👤 Dane osobowe</a>
         <a class="side-link" href="{% url 'user_addresses' %}">📍 Adresy dostawy</a>
         <a class="side-link active" href="{% url 'user_settings' %}">⚙ Ustawienia konta</a>
@@ -51,15 +50,7 @@
                         <h3>Zmiana hasła</h3>
                         <p>Zmień swoje hasło logowania.</p>
                     </div>
-                    <a href="#">Zmień</a>
-                </div>
-
-                <div class="settings-item">
-                    <div>
-                        <h3>Powiadomienia email</h3>
-                        <p>Otrzymuj informacje o promocjach i nowościach.</p>
-                    </div>
-                    <button>Włączone</button>
+                    <a href="{% url 'password_reset' %}" class="settings-btn">Zmień</a>
                 </div>
 
                 <div class="settings-item danger">
@@ -67,7 +58,10 @@
                         <h3>Usuń konto</h3>
                         <p>Ta opcja usunie konto użytkownika.</p>
                     </div>
-                    <button>Usuń</button>
+                    <form method="POST" action="{% url 'delete_account' %}" onsubmit="return confirm('Czy na pewno chcesz usunąć konto?');">
+                        {% csrf_token %}
+                            <button type="submit" class="delete-btn">Usuń</button>
+                    </form>
                 </div>
             </div>
         </div>

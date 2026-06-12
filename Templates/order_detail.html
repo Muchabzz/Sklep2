@@ -32,7 +32,7 @@
 <main class="dashboard">
     <section class="dashboard-content">
 
-        <div class="profile-edit-box">
+        <div class="profile-edit-box order-detail-box">
             <h1>Zamówienie #{{ order.id }}</h1>
 
             <p><strong>Data:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
@@ -58,9 +58,26 @@
                 </div>
             {% endfor %}
 
-            <a href="{% url 'user_orders' %}" class="reset-button">
-                Wróć do zamówień
-            </a>
+            {% if order.can_cancel %}
+                <div class="order-actions">
+                    <form method="POST" action="{% url 'cancel_order' order.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="cancel-order-btn">
+                            Anuluj zamówienie
+                        </button>
+                    </form>
+
+                    <a href="{% url 'user_orders' %}" class="back-orders-btn">
+                        ← Wróć do zamówień
+                    </a>
+                </div>
+                {% else %}
+                <div class="order-actions">
+                    <a href="{% url 'user_orders' %}" class="back-orders-btn">
+                        ← Wróć do zamówień
+                    </a>
+                </div>
+                {% endif %}
         </div>
 
     </section>

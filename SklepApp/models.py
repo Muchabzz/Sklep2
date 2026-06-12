@@ -10,31 +10,56 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+STATUS_CHOICES = [
+    ("Nowe", "Nowe"),
+    ("W realizacji", "W realizacji"),
+    ("Wysłane", "Wysłane"),
+    ("Dostarczone", "Dostarczone"),
+    ("Anulowane", "Anulowane"),
+]
+
+PAYMENT_CHOICES = [
+    ("Przelew", "Przelew"),
+    ("Za pobraniem", "Za pobraniem"),
+    ("BLIK", "BLIK"),
+]
+
+
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
     total = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=30, default="Nowe")
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="Nowe")
+    payment_method = models.CharField(max_length=30, choices=PAYMENT_CHOICES, default="Przelew")
+
     full_name = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=20, blank=True)
     street = models.CharField(max_length=150, blank=True)
     postal_code = models.CharField(max_length=10, blank=True)
     city = models.CharField(max_length=100, blank=True)
 
+    def can_cancel(self):
+        return self.status not in ["Dostarczone", "Anulowane"]
+
     def __str__(self):
-        return f"Zamówienie #{self.id} - {self.user.username}"
+        return f"Zamówienie #{self.id}"
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    order = models.ForeignKey("Order", on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey("Product", on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def subtotal(self):
         return self.quantity * self.price
-    
+
+    def __str__(self):
+        return f"{self.product.name} x {self.quantity}"
+
+
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=100)
@@ -44,4 +69,4 @@ class Address(models.Model):
     city = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.full_name}, {self.city}"     
+        return f"{self.full_name}, {self.city}"

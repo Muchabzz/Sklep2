@@ -33,7 +33,6 @@
     <aside class="dashboard-sidebar">
         <a class="side-link" href="{% url 'panel' %}">🏠 Pulpit</a>
         <a class="side-link" href="{% url 'user_orders' %}">🛍 Moje zamówienia</a>
-        <a class="side-link" href="{% url 'user_favorites' %}">♡ Ulubione produkty</a>
         <a class="side-link" href="{% url 'user_data' %}">👤 Dane osobowe</a>
         <a class="side-link active" href="{% url 'user_addresses' %}">📍 Adresy dostawy</a>
         <a class="side-link" href="{% url 'user_settings' %}">⚙ Ustawienia konta</a>
@@ -43,26 +42,64 @@
     <section class="dashboard-content">
         <div class="profile-edit-box">
             <h1>Adresy dostawy</h1>
-            <p>Dodaj adres, który później będzie można wykorzystać przy zamówieniu.</p>
+            <p>Zarządzaj adresami, które wykorzystasz przy zamówieniu.</p>
 
-            <form class="profile-form">
+            <a href="{% url 'user_addresses' %}?new=1" class="add-address-btn"> Dodaj nowy adres</a>
+
+            {% if addresses %}
+                <div class="address-list">
+                    {% for item in addresses %}
+                        <div class="address-card">
+                            <h3>{{ item.full_name }}</h3>
+                            <p>{{ item.street }}</p>
+                            <p>{{ item.postal_code }} {{ item.city }}</p>
+                            <p>{{ item.phone }}</p>
+
+                            <a href="{% url 'user_addresses' %}?edit={{ item.id }}" class="edit-address-btn">
+                                Edytuj
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Nie masz jeszcze żadnych adresów.</p>
+            {% endif %}
+
+            {% if new_mode or selected_address %}
+            <form method="POST" class="address-form" autocomplete="off">
+                {% csrf_token %}
+
+                {% if selected_address %}
+                    <input type="hidden" name="address_id" value="{{ selected_address.id }}">
+                    <h2>Edytuj adres</h2>
+                {% else %}
+                    <h2>Dodaj nowy adres</h2>
+                {% endif %}
+
                 <label>Imię i nazwisko</label>
-                <input type="text" placeholder="Jan Kowalski">
+                <input type="text" name="full_name" value="{{ selected_address.full_name|default:'' }}" required>
 
                 <label>Ulica i numer domu</label>
-                <input type="text" placeholder="Kwiatowa 12">
+                <input type="text" name="street" value="{{ selected_address.street|default:'' }}" required>
 
                 <label>Kod pocztowy</label>
-                <input type="text" placeholder="00-123">
+                <input type="text" name="postal_code" value="{{ selected_address.postal_code|default:'' }}" required>
 
                 <label>Miasto</label>
-                <input type="text" placeholder="Warszawa">
+                <input type="text" name="city" value="{{ selected_address.city|default:'' }}" required>
 
                 <label>Numer telefonu</label>
-                <input type="text" placeholder="+48 123 456 789">
+                <input type="text" name="phone" value="{{ selected_address.phone|default:'' }}" required>
 
-                <button type="button">Zapisz adres</button>
+                <button type="submit">
+                    {% if selected_address %}
+                        Zapisz zmiany
+                    {% else %}
+                        Dodaj adres
+                    {% endif %}
+                </button>
             </form>
+            {% endif %}
         </div>
     </section>
 

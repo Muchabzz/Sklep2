@@ -6,11 +6,17 @@
     <title>Dane do zamówienia</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-<body class="reset-page">
+<body class="checkout-page">
 
-<div class="reset-box">
+<div class="checkout-wrapper">
     <a href="{% url 'home' %}">
         <img src="{% static 'grafika/logo.png' %}" class="reset-logo" alt="logo">
+    </a>
+
+    <div class="checkout-box">
+
+    <a href="{% url 'cart' %}" class="checkout-back">
+        ← Wróć do koszyka
     </a>
 
     <h1>Dane do zamówienia</h1>
@@ -18,26 +24,102 @@
     <form method="POST">
         {% csrf_token %}
 
-        <label>Imię i nazwisko</label>
-        <input type="text" name="full_name" value="{{ address.full_name }}" required>
+        <div class="checkout-grid">
 
-        <label>Telefon</label>
-        <input type="text" name="phone" value="{{ address.phone }}" required>
+            <div class="checkout-left">
 
-        <label>Ulica i numer</label>
-        <input type="text" name="street" value="{{ address.street }}" required>
+                {% if user.is_authenticated and addresses %}
+                    <h2>1. Wybierz zapisany adres</h2>
 
-        <label>Kod pocztowy</label>
-        <input type="text" name="postal_code" value="{{ address.postal_code }}" required>
+                    <div class="checkout-addresses">
+                        {% for address in addresses %}
+                            <label class="checkout-choice">
+                                <input type="radio" name="selected_address" value="{{ address.id }}">
 
-        <label>Miasto</label>
-        <input type="text" name="city" value="{{ address.city }}" required>
+                                <div>
+                                    <strong>{{ address.full_name }}</strong>
+                                    <span>{{ address.street }}</span>
+                                    <span>{{ address.postal_code }} {{ address.city }}</span>
+                                    <span>{{ address.phone }}</span>
+                                </div>
+                            </label>
+                        {% endfor %}
+                    </div>
 
-        <button type="submit">
-            Złóż zamówienie
-        </button>
+                    <div class="checkout-or">lub</div>
+                {% endif %}
+
+                <h2>2. Albo wpisz nowy adres</h2>
+
+                <label>Imię i nazwisko</label>
+                <input type="text" name="full_name" placeholder="Wpisz imię i nazwisko">
+
+                <label>Telefon</label>
+                <input type="text" name="phone" placeholder="Wpisz numer telefonu">
+
+                <div class="checkout-two">
+                    <div>
+                        <label>Ulica i numer</label>
+                        <input type="text" name="street" placeholder="Wpisz ulicę i numer">
+                    </div>
+
+                    <div>
+                        <label>Kod pocztowy</label>
+                        <input type="text" name="postal_code" placeholder="Wpisz kod pocztowy">
+                    </div>
+                </div>
+
+                <label>Miasto</label>
+                <input type="text" name="city" placeholder="Wpisz miasto">
+
+            </div>
+
+            <div class="checkout-right">
+
+                <h2>3. Płatność</h2>
+
+                <div class="payment-options">
+                    <label class="checkout-payment">
+                        <input type="radio" name="payment_method" value="Przelew" required>
+                        <div>
+                            <strong>Przelew</strong>
+                            <span>Tradycyjny przelew bankowy</span>
+                        </div>
+                    </label>
+
+                    <label class="checkout-payment">
+                        <input type="radio" name="payment_method" value="Za pobraniem">
+                        <div>
+                            <strong>Za pobraniem</strong>
+                            <span>Zapłać przy odbiorze</span>
+                        </div>
+                    </label>
+
+                    <label class="checkout-payment">
+                        <input type="radio" name="payment_method" value="BLIK">
+                        <div>
+                            <strong>BLIK</strong>
+                            <span>Szybka płatność BLIK</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="checkout-total">
+                    <span>Suma do zapłaty</span>
+                    <strong>{{ total }} zł</strong>
+                </div>
+
+                <button type="submit" class="checkout-submit">
+                    🔒 Potwierdź zamówienie
+                </button>
+
+                <p class="checkout-safe">Twoje dane są u nas bezpieczne</p>
+
+            </div>
+
+        </div>
     </form>
 </div>
-
+</div>
 </body>
 </html>

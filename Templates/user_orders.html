@@ -33,7 +33,6 @@
     <aside class="dashboard-sidebar">
         <a class="side-link" href="{% url 'panel' %}">🏠 Pulpit</a>
         <a class="side-link active" href="{% url 'user_orders' %}">🛍 Moje zamówienia</a>
-        <a class="side-link" href="{% url 'user_favorites' %}">♡ Ulubione produkty</a>
         <a class="side-link" href="{% url 'user_data' %}">👤 Dane osobowe</a>
         <a class="side-link" href="{% url 'user_addresses' %}">📍 Adresy dostawy</a>
         <a class="side-link" href="{% url 'user_settings' %}">⚙ Ustawienia konta</a>
@@ -41,50 +40,48 @@
     </aside>
 
     <section class="dashboard-content">
-        <div class="profile-edit-box">
-    <h1>Moje zamówienia</h1>
-    <p>Tutaj znajdziesz historię swoich zamówień.</p>
+    <div class="profile-edit-box orders-box">
+        <h1>Moje zamówienia</h1>
+        <p>Tutaj znajdziesz historię swoich zamówień.</p>
 
-    {% if orders %}
-        <table class="orders-table">
-            <thead>
-                <tr>
-                    <th>Zamówienie</th>
-                    <th>Data</th>
-                    <th>Status</th>
-                    <th>Kwota</th>
-                    <th>Szczegóły</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for order in orders %}
+        {% if orders %}
+            <table class="orders-table">
+                <thead>
                     <tr>
-                        <td>#{{ order.id }}</td>
-                        <td>{{ order.created_at|date:"d.m.Y" }}</td>
-                        <td>
-                            <span class="status orange">
-                                {{ order.status }}
-                            </span>
-                        </td>
-                        <td>{{ order.total }} zł</td>
-                        <td>
-                            <a href="{% url 'order_detail' order.id %}" class="order-arrow">
-                                →
-                            </a>
-                        </td>
+                        <th>Zamówienie</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Kwota</th>
+                        <th>Szczegóły</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div class="empty-panel-box">
-            <h2>Brak zamówień</h2>
-            <p>Nie masz jeszcze żadnych zamówień.</p>
-            <a href="{% url 'home' %}">Przejdź do sklepu</a>
-        </div>
-    {% endif %}
-</div>
+                </thead>
+
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                            <td>
+                                <span class="status orange">{{ order.status }}</span>
+                            </td>
+                            <td>{{ order.total }} zł</td>
+                            <td>
+                                <a href="{% url 'order_detail' order.id %}" class="order-arrow">
+                                    →
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-panel-box">
+                <h2>Brak zamówień</h2>
+                <p>Nie masz jeszcze żadnych zamówień.</p>
+                <a href="{% url 'home' %}">Przejdź do sklepu</a>
+            </div>
+        {% endif %}
+    </div>
     </section>
 
 </main>

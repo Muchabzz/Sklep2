@@ -30,4 +30,6 @@ urlpatterns = [
     path('reset-hasla/gotowe/',auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),name='password_reset_complete'),
     path('checkout/', views.checkout_view, name='checkout'),
     path('zamowienie/<int:order_id>/gotowe/', views.order_success_view, name='order_success'),
+    path('panel/usun-konto/', views.delete_account_view, name='delete_account'),
+    path('panel/zamowienia/<int:order_id>/anuluj/', views.cancel_order_view, name='cancel_order'),
 ]

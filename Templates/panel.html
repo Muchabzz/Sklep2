@@ -33,7 +33,6 @@
     <aside class="dashboard-sidebar">
         <a class="side-link active" href="{% url 'panel' %}">🏠 Pulpit</a>
         <a class="side-link" href="{% url 'user_orders' %}">🛍 Moje zamówienia</a>
-        <a class="side-link" href="{% url 'user_favorites' %}">♡ Ulubione produkty</a>
         <a class="side-link" href="{% url 'user_data' %}">👤 Dane osobowe</a>
         <a class="side-link" href="{% url 'user_addresses' %}">📍 Adresy dostawy</a>
         <a class="side-link" href="{% url 'user_settings' %}">⚙ Ustawienia konta</a>
@@ -54,16 +53,7 @@
                 <div>
                     <p>Zamówienia</p>
                         <h2>{{ orders_count }}</h2>
-                    <a href="#">Zobacz wszystkie</a>
-                </div>
-            </div>
-
-            <div class="dash-card">
-                <div class="dash-icon">♡</div>
-                <div>
-                    <p>Ulubione</p>
-                    <h2>0</h2>
-                    <a href="#">Zobacz ulubione</a>
+                    <a href="{% url 'user_orders' %}">Zobacz wszystkie</a>
                 </div>
             </div>
 
@@ -71,8 +61,8 @@
                 <div class="dash-icon">📍</div>
                 <div>
                     <p>Adresy</p>
-                    <h2>0</h2>
-                    <a href="#">Zobacz adresy</a>
+                    <h2>{{ addresses_count }}</h2>
+                    <a href="{% url 'user_addresses' %}">Zobacz adresy</a>
                 </div>
             </div>
 
@@ -105,7 +95,7 @@
                                 <td><span class="status orange">{{ order.status }}</span></td>
                                 <td>{{ order.total }} zł</td>
                                 <td>
-                                    <a href="{% url 'order_detail' order.id %}">→</a>
+                                    <a href="{% url 'order_detail' order.id %}" class="order-arrow">→</a>
                                 </td>
                             </tr>
                         {% empty %}
@@ -127,7 +117,7 @@
                 <h3>{{ user.username }}</h3>
                 <p>{{ user.email }}</p>
 
-                <a href="#" class="edit-profile-btn">Edytuj dane</a>
+                <a href="{% url 'user_data' %}" class="edit-profile-btn">Edytuj dane</a>
             </aside>
 
         </div>

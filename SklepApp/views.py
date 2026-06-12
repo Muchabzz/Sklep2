@@ -189,6 +189,8 @@ def register_view(request):
 def panel_view(request):
     cart_count = get_cart_count(request)
 
+    addresses_count = Address.objects.filter(user=request.user).count()
+
     orders = Order.objects.filter(
         user=request.user
     ).order_by("-created_at")[:3]
@@ -200,7 +202,9 @@ def panel_view(request):
     return render(request, 'panel.html', {
         'cart_count': cart_count,
         'orders': orders,
-        'orders_count': orders_count
+        'orders_count': orders_count,
+        'addresses_count': addresses_count,
+    
     })
 
 def get_cart_count(request):
@@ -260,11 +264,52 @@ def user_favorites_view(request):
         'cart_count': get_cart_count(request)
     })
 
-
 @login_required
 def user_addresses_view(request):
-    return render(request, 'user_addresses.html', {
-        'cart_count': get_cart_count(request)
+    addresses = Address.objects.filter(user=request.user)
+
+    edit_id = request.GET.get("edit")
+    new_mode = request.GET.get("new") == "1"
+
+    selected_address = None
+
+    if edit_id:
+        selected_address = Address.objects.get(id=edit_id, user=request.user)
+
+    if request.method == "POST":
+        address_id = request.POST.get("address_id")
+
+        full_name = request.POST.get("full_name")
+        street = request.POST.get("street")
+        postal_code = request.POST.get("postal_code")
+        city = request.POST.get("city")
+        phone = request.POST.get("phone")
+
+        if address_id:
+            selected_address = Address.objects.get(id=address_id, user=request.user)
+            selected_address.full_name = full_name
+            selected_address.street = street
+            selected_address.postal_code = postal_code
+            selected_address.city = city
+            selected_address.phone = phone
+            selected_address.save()
+        else:
+            Address.objects.create(
+                user=request.user,
+                full_name=full_name,
+                street=street,
+                postal_code=postal_code,
+                city=city,
+                phone=phone
+            )
+
+        return redirect("user_addresses")
+
+    return render(request, "user_addresses.html", {
+        "addresses": addresses,
+        "selected_address": selected_address,
+        "new_mode": new_mode,
+        "cart_count": get_cart_count(request)
     })
 
 @login_required
@@ -358,3 +403,102 @@ def order_detail_view(request, order_id):
         'order': order,
         'cart_count': get_cart_count(request)
     })
+
+@login_required
+def delete_account_view(request):
+    if request.method == "POST":
+        user = request.user
+        logout(request)
+        user.delete()
+        return redirect('home')
+
+    return redirect('user_settings')
+
+def checkout_view(request):
+    cart = request.session.get("cart", {})
+
+    if not cart:
+        return redirect("cart")
+
+    addresses = []
+
+    if request.user.is_authenticated:
+        addresses = Address.objects.filter(user=request.user)
+
+    if request.method == "POST":
+        selected_address_id = request.POST.get("selected_address")
+        payment_method = request.POST.get("payment_method")
+
+        if selected_address_id and request.user.is_authenticated:
+            address = Address.objects.get(id=selected_address_id, user=request.user)
+
+            full_name = address.full_name
+            phone = address.phone
+            street = address.street
+            postal_code = address.postal_code
+            city = address.city
+        else:
+            full_name = request.POST.get("full_name")
+            phone = request.POST.get("phone")
+            street = request.POST.get("street")
+            postal_code = request.POST.get("postal_code")
+            city = request.POST.get("city")
+
+        total = 0
+        order_items = []
+
+        for product_id, quantity in cart.items():
+            product = Product.objects.get(id=product_id)
+            total += product.price * quantity
+
+            order_items.append({
+                "product": product,
+                "quantity": quantity,
+                "price": product.price
+            })
+
+        order = Order.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            total=total,
+            payment_method=payment_method,
+            full_name=full_name,
+            phone=phone,
+            street=street,
+            postal_code=postal_code,
+            city=city
+        )
+
+        for item in order_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item["product"],
+                quantity=item["quantity"],
+                price=item["price"]
+            )
+
+        request.session["cart"] = {}
+        request.session.modified = True
+
+        return redirect("order_success", order_id=order.id)
+    
+    total = 0
+
+    for product_id, quantity in cart.items():
+        product = Product.objects.get(id=product_id)
+        total += product.price * quantity
+
+    return render(request, "checkout.html", {
+        "addresses": addresses,
+        "cart_count": get_cart_count(request),
+        "total": total,
+    })
+
+@login_required
+def cancel_order_view(request, order_id):
+    order = Order.objects.get(id=order_id, user=request.user)
+
+    if request.method == "POST" and order.can_cancel():
+        order.status = "Anulowane"
+        order.save()
+
+    return redirect("order_detail", order_id=order.id)
