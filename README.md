@@ -1,52 +1,61 @@
 # MiniSklep
 
-MiniSklep to prosta aplikacja sklepu internetowego napisana w Django. Projekt obsluguje katalog produktow, szczegoly produktu, koszyk zapisany w sesji, rejestracje i logowanie uzytkownikow, panel klienta, adresy dostawy, skladanie zamowien oraz panel administratora Django.
+Aplikacja sklepu internetowego napisana w Django. Projekt zawiera katalog produktów, koszyk oparty o sesję, konta użytkowników, panel klienta, adresy dostawy, obsługę zamówień oraz panel administracyjny Django.
 
-## Technologie
+## Spis Treści
+
+- [Status Projektu](#status-projektu)
+- [Wymagania](#wymagania)
+- [Uruchomienie Lokalne](#uruchomienie-lokalne)
+- [Konfiguracja](#konfiguracja)
+- [Najważniejsze Komendy](#najważniejsze-komendy)
+- [Struktura Projektu](#struktura-projektu)
+- [Główne Funkcje](#główne-funkcje)
+- [Adresy URL](#adresy-url)
+- [Dokumentacja Techniczna](#dokumentacja-techniczna)
+- [Znane Ograniczenia](#znane-ograniczenia)
+
+## Status Projektu
+
+Projekt jest skonfigurowany jako aplikacja deweloperska Django:
+
+- `DEBUG = True`,
+- lokalna baza danych SQLite,
+- e-maile wysyłane do konsoli,
+- statyki obsługiwane przez Django/WhiteNoise,
+- brak rozbudowanego zestawu testów automatycznych.
+
+Przed wdrożeniem produkcyjnym wymagane jest co najmniej ustawienie `SECRET_KEY`, wyłączenie `DEBUG`, skonfigurowanie `ALLOWED_HOSTS` i wykonanie `collectstatic`.
+
+## Wymagania
 
 - Python 3.12 lub nowszy
-- Django 6.0.3
-- SQLite jako lokalna baza danych
-- WhiteNoise do serwowania plikow statycznych
-- Pillow do obslugi obrazow
+- pip
+- virtualenv/venv
+- przeglądarka internetowa
+- terminal PowerShell, CMD, Bash albo podobny
 
-Pelna lista zaleznosci znajduje sie w pliku `requirements.txt`.
+Zależności aplikacji znajdują się w [requirements.txt](requirements.txt).
 
-## Struktura projektu
+## Uruchomienie Lokalne
 
-```text
-.
-|-- manage.py                 # Narzedzie CLI Django
-|-- requirements.txt          # Zaleznosci Pythona
-|-- db.sqlite3                # Lokalna baza danych SQLite, jesli istnieje w kopii projektu
-|-- MiniSklep/                # Konfiguracja projektu Django
-|-- SklepApp/                 # Glowna aplikacja sklepu
-|-- Templates/                # Szablony HTML
-|-- static/                   # Pliki statyczne uzywane w development
-|-- staticfiles/              # Wynik collectstatic
-|-- media/                    # Pliki wyslane / media produktow
-|-- grafika/, products/       # Dodatkowe obrazy produktow
-|-- tekstowe/                 # Materialy tekstowe i starsza dokumentacja
-`-- docs/                     # Dokumentacja techniczna projektu
-```
+Poniższe kroki zakładają świeżą kopię projektu.
 
-## Szybkie uruchomienie
+### 1. Przejście do katalogu projektu
 
-Ponizsze kroki zakladaja swieza kopie projektu.
-
-### 1. Wejdz do katalogu projektu
+Windows:
 
 ```powershell
-cd C:\Users\kamil\Desktop\Sklep2
+cd C:\sciezka\do\Sklep2
 ```
 
-Na Linux/macOS:
+Linux/macOS:
 
 ```bash
 cd /sciezka/do/Sklep2
 ```
 
-### 2. Utworz i aktywuj srodowisko wirtualne
+### 2. Utworzenie środowiska wirtualnego
 
 Windows PowerShell:
 
@@ -69,64 +78,67 @@ python3.12 -m venv .venv
 source .venv/bin/activate
 ```
 
-Jezeli system ma tylko komende `python` zamiast `py` albo `python3.12`, uzyj lokalnie dostepnej komendy Pythona 3.12+.
+Jeżeli na komputerze komenda Pythona nazywa się inaczej, użyj lokalnie dostępnej komendy wskazującej na Python 3.12+.
 
-### 3. Zainstaluj zaleznosci
+### 3. Instalacja zależności
 
 ```bash
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-### 4. Przygotuj baze danych
-
-Projekt korzysta z SQLite. Jezeli w repozytorium jest plik `db.sqlite3`, aplikacja moze wystartowac od razu z istniejacymi danymi. Dla czystej bazy wykonaj migracje:
+### 4. Przygotowanie bazy danych
 
 ```bash
 python manage.py migrate
 ```
 
-Opcjonalnie utworz konto administratora:
+Opcjonalnie utwórz konto administratora:
 
 ```bash
 python manage.py createsuperuser
 ```
 
-### 5. Uruchom serwer deweloperski
+### 5. Uruchomienie serwera
 
 ```bash
 python manage.py runserver
 ```
 
-Domyslnie aplikacja bedzie dostepna pod adresem:
+Aplikacja będzie dostępna pod adresami:
 
 - sklep: http://127.0.0.1:8000/
-- admin Django: http://127.0.0.1:8000/admin/
+- panel admina: http://127.0.0.1:8000/admin/
 
 ## Konfiguracja
 
-Glowny plik ustawien to `MiniSklep/settings.py`.
+Główna konfiguracja znajduje się w [MiniSklep/settings.py](MiniSklep/settings.py).
 
-Najwazniejsze ustawienia:
+Najważniejsze ustawienia:
 
-- `SECRET_KEY` - moze byc podany przez zmienna srodowiskowa `SECRET_KEY`; jesli jej nie ma, uzywana jest wartosc deweloperska z pliku ustawien.
-- `DEBUG = True` - konfiguracja deweloperska, nieprodukcyjna.
-- `ALLOWED_HOSTS` - zawiera `sklep2-owtt.onrender.com`, `localhost` i `127.0.0.1`.
-- `DATABASES` - SQLite w pliku `db.sqlite3`.
-- `STATICFILES_DIRS` - katalog `static`.
-- `STATIC_ROOT` - katalog `staticfiles`, tworzony przez `collectstatic`.
-- `MEDIA_ROOT` - katalog `media`.
-- `EMAIL_BACKEND` - backend konsolowy; linki resetu hasla wypisywane sa w terminalu.
+| Ustawienie | Znaczenie |
+| --- | --- |
+| `SECRET_KEY` | Klucz Django. Może pochodzić ze zmiennej środowiskowej `SECRET_KEY`. |
+| `DEBUG` | Obecnie `True`, czyli tryb deweloperski. |
+| `ALLOWED_HOSTS` | Dozwolone hosty: Render, localhost i 127.0.0.1. |
+| `DATABASES` | SQLite w pliku `db.sqlite3`. |
+| `STATIC_ROOT` | Katalog wynikowy dla `collectstatic`. |
+| `MEDIA_ROOT` | Katalog plików multimedialnych. |
+| `EMAIL_BACKEND` | Backend konsolowy, linki resetu hasła pojawiają się w terminalu. |
 
-Dla wdrozenia produkcyjnego ustaw przynajmniej:
+Przykład ustawienia sekretu w PowerShell:
 
 ```powershell
 $env:SECRET_KEY="wlasny-dlugi-losowy-klucz"
 ```
 
-oraz zmien `DEBUG` na `False` i dostosuj `ALLOWED_HOSTS`.
+Przykład ustawienia sekretu w Bash:
 
-## Podstawowe komendy
+```bash
+export SECRET_KEY="wlasny-dlugi-losowy-klucz"
+```
+
+## Najważniejsze Komendy
 
 ```bash
 python manage.py check
@@ -137,58 +149,68 @@ python manage.py collectstatic
 python manage.py runserver
 ```
 
-## Glowna funkcjonalnosc
+## Struktura Projektu
 
-- lista produktow na stronie glownej,
-- karta szczegolow produktu,
-- dodawanie do koszyka przez AJAX,
-- zmiana liczby sztuk w koszyku,
-- czyszczenie koszyka,
+```text
+.
+|-- manage.py                 # Narzędzie CLI Django
+|-- requirements.txt          # Zależności Pythona
+|-- db.sqlite3                # Lokalna baza SQLite, jeżeli istnieje w kopii projektu
+|-- MiniSklep/                # Konfiguracja projektu Django
+|-- SklepApp/                 # Główna aplikacja sklepu
+|-- Templates/                # Szablony HTML
+|-- static/                   # Źródłowe pliki statyczne
+|-- staticfiles/              # Wynik collectstatic
+|-- media/                    # Pliki multimedialne
+|-- grafika/, products/       # Dodatkowe obrazy produktów
+|-- tekstowe/                 # Materiały pomocnicze i starsza dokumentacja
+`-- docs/                     # Dokumentacja techniczna
+```
+
+## Główne Funkcje
+
+- lista produktów,
+- szczegóły produktu,
+- koszyk przechowywany w sesji,
+- zwiększanie, zmniejszanie i usuwanie pozycji koszyka,
 - rejestracja, logowanie i wylogowanie,
-- reset hasla przez mechanizmy Django,
+- reset hasła przez wbudowane widoki Django,
 - panel klienta,
-- edycja danych uzytkownika,
-- lista zamowien i szczegoly zamowienia,
-- anulowanie zamowienia, jezeli nie jest dostarczone lub anulowane,
-- zarzadzanie adresami dostawy,
-- skladanie zamowien z wybrana metoda platnosci; praktycznie najlepiej testowac jako zalogowany uzytkownik,
-- panel admina z produktami, adresami i zamowieniami.
+- edycja danych użytkownika,
+- zarządzanie adresami dostawy,
+- lista zamówień i szczegóły zamówienia,
+- anulowanie zamówienia, jeżeli status na to pozwala,
+- finalizacja zamówienia z wyborem metody płatności,
+- panel admina dla produktów, adresów i zamówień.
 
-## Najwazniejsze adresy URL
+## Adresy URL
 
-| URL | Nazwa widoku | Opis |
+| URL | Nazwa | Opis |
 | --- | --- | --- |
-| `/` | `home` | Lista produktow |
-| `/product/<id>/` | `item_details` | Szczegoly produktu |
+| `/` | `home` | Lista produktów |
+| `/product/<id>/` | `item_details` | Szczegóły produktu |
 | `/cart/` | `cart` | Koszyk |
-| `/checkout/` | `checkout` | Finalizacja zamowienia |
+| `/checkout/` | `checkout` | Finalizacja zamówienia |
 | `/login/` | `login` | Logowanie |
 | `/register/` | `register` | Rejestracja |
 | `/panel/` | `panel` | Panel klienta |
 | `/panel/dane/` | `user_data` | Dane konta |
 | `/panel/adresy/` | `user_addresses` | Adresy dostawy |
-| `/panel/zamowienia/` | `user_orders` | Zamowienia uzytkownika |
-| `/admin/` | admin Django | Panel administracyjny |
+| `/panel/zamowienia/` | `user_orders` | Zamówienia użytkownika |
+| `/admin/` | Django admin | Panel administracyjny |
 
-## Dodawanie produktow
+## Dokumentacja Techniczna
 
-1. Uruchom migracje i utworz superusera.
-2. Wejdz na http://127.0.0.1:8000/admin/.
-3. Zaloguj sie kontem administratora.
-4. W sekcji `Products` dodaj produkt.
-5. Pole `image` przechowuje tekstowa sciezke/nazwe obrazu zgodnie z aktualna implementacja modelu.
+Pełniejszy opis architektury, modeli, przepływów, wdrożenia, testowania i ryzyk znajduje się tutaj:
 
-## Dokumentacja
+- [docs/DOKUMENTACJA.md](docs/DOKUMENTACJA.md)
 
-Szczegolowy opis architektury, modeli, przeplywow i uwag utrzymaniowych znajduje sie w pliku:
+## Znane Ograniczenia
 
-- `docs/DOKUMENTACJA.md`
-
-## Znane uwagi
-
-- Projekt jest obecnie skonfigurowany pod development (`DEBUG = True`).
-- W repozytorium sa katalogi srodowisk wirtualnych `venv` i `.venv`; nowa osoba powinna utworzyc wlasne srodowisko zamiast polegac na istniejacych plikach.
-- Model `Product.image` jest polem tekstowym, nie `ImageField`.
-- Koszyk jest przechowywany w sesji jako slownik `{product_id: quantity}`.
-- Reset hasla wysyla wiadomosc do konsoli, poniewaz aktywny jest `django.core.mail.backends.console.EmailBackend`.
-- `checkout` nie wymaga obecnie logowania na poziomie URL, ale strona sukcesu zamowienia wymaga zalogowanego uzytkownika.
+- Projekt jest w trybie deweloperskim.
+- W repozytorium znajdują się katalogi `venv` i `.venv`; nowa osoba powinna utworzyć własne środowisko.
+- `Product.image` jest polem tekstowym, nie `ImageField`.
+- Koszyk jest przechowywany w sesji jako słownik `{product_id: quantity}`.
+- Reset hasła działa przez konsolę, nie przez realny serwer SMTP.
+- `checkout` nie ma dekoratora logowania, ale strona sukcesu zamówienia wymaga zalogowanego użytkownika.
+- W kodzie są drobne elementy wymagające uporządkowania przed produkcją, opisane w dokumentacji technicznej.
