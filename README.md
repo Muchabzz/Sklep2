@@ -37,6 +37,30 @@ Przed wdrożeniem produkcyjnym wymagane jest co najmniej ustawienie `SECRET_KEY`
 
 Zależności aplikacji znajdują się w [requirements.txt](requirements.txt).
 
+Ważne zależności:
+
+- `Django` - framework aplikacji.
+- `Pillow` - biblioteka do obsługi obrazów; przydaje się przy pracy z grafikami produktów i mediami.
+- `WhiteNoise` - obsługa plików statycznych przez middleware Django.
+- `certifi` - wymagane, ponieważ [MiniSklep/settings.py](MiniSklep/settings.py) importuje `certifi` przy konfiguracji certyfikatów SSL.
+
+Przed instalacją sprawdź wersję Pythona:
+
+Windows:
+
+```powershell
+py -0p
+py -3.12 --version
+```
+
+Linux/macOS:
+
+```bash
+python3.12 --version
+```
+
+Jeżeli te komendy nie działają, najpierw zainstaluj Python 3.12+ i dodaj go do `PATH`.
+
 ## Uruchomienie Lokalne
 
 Poniższe kroki zakładają świeżą kopię projektu.
@@ -57,28 +81,44 @@ cd /sciezka/do/Sklep2
 
 ### 2. Utworzenie środowiska wirtualnego
 
+W repozytorium mogą znajdować się stare katalogi `venv` albo `.venv`. Nie używaj ich jako pewnego środowiska startowego. Najbezpieczniej utworzyć nowe, lokalne środowisko o nazwie `.venv-local`.
+
 Windows PowerShell:
 
 ```powershell
-py -3.12 -m venv .venv
-.\.venv\Scripts\Activate.ps1
+py -3.12 -m venv .venv-local
+.\.venv-local\Scripts\Activate.ps1
+```
+
+Jeżeli PowerShell blokuje aktywację skryptu, uruchom w tym samym oknie:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv-local\Scripts\Activate.ps1
 ```
 
 Windows CMD:
 
 ```bat
-py -3.12 -m venv .venv
-.venv\Scripts\activate.bat
+py -3.12 -m venv .venv-local
+.venv-local\Scripts\activate.bat
 ```
 
 Linux/macOS:
 
 ```bash
-python3.12 -m venv .venv
-source .venv/bin/activate
+python3.12 -m venv .venv-local
+source .venv-local/bin/activate
 ```
 
 Jeżeli na komputerze komenda Pythona nazywa się inaczej, użyj lokalnie dostępnej komendy wskazującej na Python 3.12+.
+
+Po aktywacji sprawdź, czy terminal używa Pythona ze środowiska wirtualnego:
+
+```bash
+python --version
+python -m pip --version
+```
 
 ### 3. Instalacja zależności
 
@@ -87,10 +127,24 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
+Szybka kontrola po instalacji:
+
+```bash
+python -c "import django; print(django.get_version())"
+```
+
+Oczekiwany wynik to wersja `6.0.3`.
+
 ### 4. Przygotowanie bazy danych
 
 ```bash
 python manage.py migrate
+```
+
+Sprawdź konfigurację Django:
+
+```bash
+python manage.py check
 ```
 
 Opcjonalnie utwórz konto administratora:
@@ -109,6 +163,26 @@ Aplikacja będzie dostępna pod adresami:
 
 - sklep: http://127.0.0.1:8000/
 - panel admina: http://127.0.0.1:8000/admin/
+
+Jeżeli port `8000` jest zajęty:
+
+```bash
+python manage.py runserver 8001
+```
+
+Wtedy aplikacja będzie dostępna pod adresem http://127.0.0.1:8001/.
+
+### 6. Kontrola poprawnego uruchomienia
+
+Po starcie sprawdź kolejno:
+
+1. Wejdź na http://127.0.0.1:8000/.
+2. Wejdź na http://127.0.0.1:8000/admin/.
+3. Zaloguj się kontem administratora.
+4. Dodaj produkt w panelu admina, jeżeli lista produktów jest pusta.
+5. Wróć na stronę główną i sprawdź, czy produkt jest widoczny.
+6. Dodaj produkt do koszyka.
+7. Zarejestruj zwykłego użytkownika i przejdź testowy checkout jako zalogowany użytkownik.
 
 ## Konfiguracja
 
@@ -142,12 +216,15 @@ export SECRET_KEY="wlasny-dlugi-losowy-klucz"
 
 ```bash
 python manage.py check
-python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py collectstatic
 python manage.py runserver
 ```
+
+`makemigrations` uruchamiaj dopiero wtedy, gdy zmieniasz modele w `SklepApp/models.py`.
+
+`collectstatic` nie jest wymagane do zwykłego lokalnego `runserver`; przydaje się głównie przy wdrożeniu albo testowaniu obsługi statyków przez WhiteNoise.
 
 ## Struktura Projektu
 
@@ -214,3 +291,35 @@ Pełniejszy opis architektury, modeli, przepływów, wdrożenia, testowania i ry
 - Reset hasła działa przez konsolę, nie przez realny serwer SMTP.
 - `checkout` nie ma dekoratora logowania, ale strona sukcesu zamówienia wymaga zalogowanego użytkownika.
 - W kodzie są drobne elementy wymagające uporządkowania przed produkcją, opisane w dokumentacji technicznej.
+
+## Najczęstsze Problemy Przy Instalacji
+
+### `python` albo `py` nie jest rozpoznawany
+
+Python nie jest zainstalowany albo nie został dodany do `PATH`. Zainstaluj Python 3.12+ i zaznacz opcję dodania do `PATH` w instalatorze.
+
+### `Activate.ps1 cannot be loaded`
+
+PowerShell blokuje uruchamianie skryptów. W tym samym oknie terminala uruchom:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Następnie ponownie aktywuj środowisko.
+
+### `ModuleNotFoundError: No module named 'django'`
+
+Środowisko wirtualne nie jest aktywne albo zależności nie zostały zainstalowane.
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### Strona działa, ale nie ma produktów
+
+Utwórz superusera, wejdź do `/admin/` i dodaj produkty ręcznie.
+
+### Reset hasła nie wysyła e-maila
+
+To oczekiwane lokalnie. Wiadomość z linkiem resetującym pojawia się w terminalu, bo projekt używa konsolowego backendu e-mail.
